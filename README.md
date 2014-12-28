@@ -8,19 +8,19 @@ our machines and have a consistent, searchable journal.
 
 * Starting:
 
-  -- `pyjournal.py init nickname path/ [working-path]`
+  - `pyjournal.py init nickname path/ [working-path]`
 
-     this initializes a bare git repo that will hold the journal data
-     it will also add to (or create) a .pyjournal file with an entry
+    this initializes a bare git repo that will hold the journal data
+    it will also add to (or create) a .pyjournal file with an entry
 
-     creating a bare repo for others to clone to/from:
+    creating a bare repo for others to clone to/from:
 
-     ```
-     cd path/
-     mkdir nickname.git
-     cd nickname.git
-     git init --bare
-     ```
+    ```
+    cd path/
+    mkdir nickname.git
+    cd nickname.git
+    git init --bare
+    ```
      
     creating the working directory that we will interact with:
 
