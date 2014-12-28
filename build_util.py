@@ -89,7 +89,7 @@ def build(nickname, defs):
     os.chdir(build_dir)
     
     for i in range(3):
-        stdout0, stderr0 = shell_util.run("pdflatex journal.tex")        
+        stdout0, stderr0 = shell_util.run("pdflatex --halt-on-error journal.tex")
 
     print "journal is located at {}/journal.pdf".format(build_dir)
     

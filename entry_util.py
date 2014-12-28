@@ -33,12 +33,13 @@ def entry(nickname, images, defs, string=None):
 
     # determine the filename
     entry_id = get_entry_string()
+    entry_dir = get_dir_string()
     ofile = entry_id + ".tex"
 
     # determine the directory we place it in -- this is the form yyyy-mm-dd/
     odir = "{}/journal-{}/entries/{}/".format(defs[nickname]["working_path"],
                                               nickname,
-                                              get_dir_string())
+                                              entry_dir)
     
     if not os.path.isdir(odir):
         try: os.mkdir(odir)
@@ -68,7 +69,7 @@ def entry(nickname, images, defs, string=None):
             dest = odir
 
             if os.path.isfile("{}/{}".format(dest, im)):
-                im_copy = "{}_{}".format(entry_id, im)
+                im_copy = "{}_{}".format(entry_id.replace(".", "_"), im)
             else:
                 im_copy = im
 
@@ -91,7 +92,7 @@ def entry(nickname, images, defs, string=None):
 
             # add the figure text
             for l in figure_str.split("\n"):
-                f.write("{}\n".format(l.replace("@figname@", im_copy).replace("@figlabel@", im0).rstrip()))
+                f.write("{}\n".format(l.replace("@figname@", "entries/{}/{}".format(entry_dir, im_copy)).replace("@figlabel@", im0).rstrip()))
                 
 
     # add the entry id as a LaTeX comment
