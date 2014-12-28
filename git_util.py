@@ -1,9 +1,9 @@
 import os
-import subprocess
 import sys
 
 import entry_util
 import master_util
+import shell_util
 
 def init(nickname, master_path, working_path, defs):
 
@@ -18,10 +18,7 @@ def init(nickname, master_path, working_path, defs):
         sys.exit("ERROR: unable to create a directory in {}".format(master_path))
 
     os.chdir(git_master)
-    prog = ["git", "init", "--bare"]
-    p0 = subprocess.Popen(prog, stdout=subprocess.PIPE,
-                          stderr=subprocess.STDOUT)
-    stdout0, stderr0 = p0.communicate()
+    stdout0, stderr0 = shell_util.run("git init --bare")
     
 
     # create the local working copy
@@ -29,10 +26,7 @@ def init(nickname, master_path, working_path, defs):
     except:
         sys.exit("ERROR: unable to change to {}".format(working_path))
 
-    prog = ["git", "clone", git_master]
-    p0 = subprocess.Popen(prog, stdout=subprocess.PIPE,
-                          stderr=subprocess.STDOUT)
-    stdout0, stderr0 = p0.communicate()
+    stdout0, stderr0 = shell_util.run("git clone " + git_master)
     
 
     # create the initial directory structure
@@ -51,7 +45,7 @@ def init(nickname, master_path, working_path, defs):
     f.write("[{}]\n".format(nickname))
     f.write("master_path = {}\n".format(master_path))
     f.write("working_path = {}\n".format(working_path))
-
+    f.write("\n")
     f.close()
 
     defs[nickname] = {}
@@ -76,12 +70,9 @@ def init(nickname, master_path, working_path, defs):
     
     # do a git push to make it synced
     os.chdir(working_journal)
-    prog = ["git", "push"]
-    p0 = subprocess.Popen(prog, stdout=subprocess.PIPE,
-                          stderr=subprocess.STDOUT)
-    stdout0, stderr0 = p0.communicate()
-    
-    
+
+    stdout0, stderr0 = shell_util.run("git push")
+        
     
 def connect(nickname, master_path, working_path):
 

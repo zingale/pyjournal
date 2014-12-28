@@ -56,7 +56,9 @@ if __name__ == "__main__":
     
     nickname = args.n
     if nickname == None:
-        nickname = defs.keys()[0]
+        journals = defs.keys()
+        journals.remove("param_file")
+        nickname = journals[0]
         
     action = args.action
 

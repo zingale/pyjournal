@@ -1,6 +1,7 @@
 import os
-import subprocess
 import sys
+
+import shell_util
 
 month = {"1": "January",
          "2": "February",
@@ -19,10 +20,8 @@ def build(nickname, defs):
 
     entry_dir = "{}/journal-{}/entries/".format(defs[nickname]["working_path"], nickname)
 
-
     entries = []
     years = []
-
     
     # get the list of directories in entries/
     for d in os.listdir(entry_dir):
@@ -90,11 +89,7 @@ def build(nickname, defs):
     os.chdir(build_dir)
     
     for i in range(3):
-        prog = ["pdflatex", "journal.tex"]
-        p0 = subprocess.Popen(prog, stdout=subprocess.PIPE,
-                              stderr=subprocess.STDOUT)
-        stdout0, stderr0 = p0.communicate()
-        
+        stdout0, stderr0 = shell_util.run("pdflatex journal.tex")        
 
     print "journal is located at {}/journal.pdf".format(build_dir)
     

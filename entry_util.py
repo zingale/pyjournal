@@ -1,7 +1,8 @@
 import datetime
 import os
-import subprocess
 import sys
+
+import shell_util
 
 def get_entry_string():
     now = datetime.datetime.now()
@@ -36,13 +37,11 @@ def entry(nickname, images, defs, string=None):
     # launch the editor specified in the EDITOR environment variable
     if string == None:
         if editor == "emacs":
-            prog = [editor, "-nw", odir + ofile]
+            prog = "{} {}/{}".format("emacs -nw", odir, ofile)
         else:
-            prog = [editor, odir + ofile]
+            prog = "{} {}/{}".format(editor, odir, ofile)
             
-        p0 = subprocess.Popen(prog, stdout=subprocess.PIPE,
-                              stderr=subprocess.STDOUT)
-        stdout0, stderr0 = p0.communicate()            
+        stdout0, stderr0 = shell_util.run(prog)
 
     else:
         try: f = open(odir + ofile, "w")             
@@ -56,14 +55,7 @@ def entry(nickname, images, defs, string=None):
     # commit the entry to the working git repo
     os.chdir(odir)
     
-    prog = ["git", "add", ofile]
-    p0 = subprocess.Popen(prog, stdout=subprocess.PIPE,
-                          stderr=subprocess.STDOUT)
-    stdout0, stderr0 = p0.communicate()            
-    
-    prog = ["git", "commit", "-m", "'new entry'", ofile]
-    p0 = subprocess.Popen(prog, stdout=subprocess.PIPE,
-                          stderr=subprocess.STDOUT)
-    stdout0, stderr0 = p0.communicate()            
+    stdout0, stderr0 = shell_util.run("git add " + ofile)
+    stdout0, stderr0 = shell_util.run("git commit -m 'new entry' " + ofile)
 
 
