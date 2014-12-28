@@ -91,5 +91,14 @@ def build(nickname, defs):
     for i in range(3):
         stdout0, stderr0 = shell_util.run("pdflatex --halt-on-error journal.tex")
 
-    print "journal is located at {}/journal.pdf".format(build_dir)
+    # if we were not successful, then the PDF is not produced
+    # note: pdflatex does not seem to use stderr at all
+    pdf = os.path.normpath("{}/journal.pdf".format(build_dir))
+    if os.path.isfile(pdf):
+        print "journal is located at {}".format(pdf)
+    else:
+        print stdout0
+        sys.exit("There were LaTeX errors")
+
+
     

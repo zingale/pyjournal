@@ -7,6 +7,6 @@ def run(string):
     prog = shlex.split(string)
     
     p0 = subprocess.Popen(prog, stdout=subprocess.PIPE,
-                          stderr=subprocess.STDOUT)
+                          stderr=subprocess.PIPE)
     stdout0, stderr0 = p0.communicate()
     return stdout0, stderr0
