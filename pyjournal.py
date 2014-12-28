@@ -7,6 +7,7 @@ a simple commandline-driven scientific journal in LaTeX managed by git
 import os
 import sys
 import argparse
+import ConfigParser
 
 import journal_git
 
@@ -19,7 +20,7 @@ def entry(nickname, images):
     pass
 
 
-def show(nickname):
+def build(nickname):
 
     pass
 
@@ -30,15 +31,15 @@ if __name__ == "__main__":
     help = {"init": "options: nickname path/ [working-path] -- initialize a journal\n",
             "connect": "options: nickname git-path/ local-path/ -- connect to a remote journal for local editing\n",
             "entry": "options: [image1 image2 image3 ...] -- add a new entry, with optional images\n",
-            "show": "no options -- display the journal in a PDF reader",
+            "build": "no options -- build a PDF of the journal",
             "pull": "no options -- pull from the remote journal",
             "push": "no options -- push local changes to the remote journal"}
     
     parser = argparse.ArgumentParser()
     parser.add_argument("-n", help="nickname of the journal", type=str, default=None)
 
-    parser.add_argument("action", metavar="action", type=str, nargs=1, default="entry", 
-                        help="one of the allowable actions: init, connect, entry, help, show, pull, push")
+    parser.add_argument("action", metavar="action", type=str, nargs="?", default="entry", 
+                        help="one of the allowable actions: init, connect, entry, help, build, pull, push")
 
     parser.add_argument("options", metavar="action-options", type=str,
                         default=None, nargs="*",
@@ -64,7 +65,8 @@ if __name__ == "__main__":
             
     
     nickname = args.n
-    action = args.action[0]
+    action = args.action
+
     
     if action == "help":
         if not len(args.options) == 1:
@@ -117,8 +119,8 @@ if __name__ == "__main__":
         entry(nickname, images)
 
         
-    elif action == "show":
-        show(nickname)
+    elif action == "build":
+        build(nickname)
         
 
     elif action == "pull":

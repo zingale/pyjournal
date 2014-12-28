@@ -29,6 +29,15 @@ def init(nickname, master_path, working_path, defs):
                           stderr=subprocess.STDOUT)
     stdout0, stderr0 = p0.communicate()
     
+
+    # create the initial directory structure
+
+    # create an initial entry saying "journal created"
+
+    # copy over the journal.tex
+
+    # do a git push to make it synced
+
     
     # create (or add to) the .pyjournalrc file
     try: f = open(defs["param_file"], "a+")             
