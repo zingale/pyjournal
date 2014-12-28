@@ -23,13 +23,14 @@ if __name__ == "__main__":
             "entry": "options: [image1 image2 image3 ...] -- add a new entry, with optional images\n",
             "build": "no options -- build a PDF of the journal",
             "pull": "no options -- pull from the remote journal",
-            "push": "no options -- push local changes to the remote journal"}
+            "push": "no options -- push local changes to the remote journal",
+            "status": "no options -- list the current journal information"}
     
     parser = argparse.ArgumentParser()
     parser.add_argument("-n", help="nickname of the journal", type=str, default=None)
 
     parser.add_argument("action", metavar="action", type=str, nargs="?", default="entry", 
-                        help="one of the allowable actions: init, connect, entry, help, build, pull, push")
+                        help="one of the allowable actions: init, connect, entry, help, build, pull, push, status")
 
     parser.add_argument("options", metavar="action-options", type=str,
                         default=None, nargs="*",
@@ -125,7 +126,14 @@ if __name__ == "__main__":
     elif action == "push":
         git_util.push(nickname)
 
-        
+
+    elif action == "status":
+        if nickname in defs.keys():
+            print "pyjournal"
+            print "  current journal: {}".format(nickname)
+            print "  working directory: {}/journal-{}".format(defs[nickname]["working_path"], nickname)
+            print "  master git repo: {}/journal-{}.git".format(defs[nickname]["working_path"], nickname)
+            print " "
     else:
         sys.exit("invalid action")
 
