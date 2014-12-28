@@ -101,7 +101,7 @@ if __name__ == "__main__":
         master_path = args.options[1]
         working_path = args.options[2]
         
-        git_util.connect(nickname, master_path, working_path)
+        git_util.connect(nickname, master_path, working_path, defs)
 
         
     elif action == "entry":

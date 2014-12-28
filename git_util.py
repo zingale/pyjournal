@@ -74,13 +74,28 @@ def init(nickname, master_path, working_path, defs):
     stdout0, stderr0 = shell_util.run("git push")
         
     
-def connect(nickname, master_path, working_path):
+def connect(nickname, master_path, working_path, defs):
 
-    # git clone the bare repo at master_path into the working path
-
-    # create (or add to) the .pyjournalrc file
+    # does the nickname match the master path name?
     
-    pass
+    # git clone the bare repo at master_path into the working path
+    try: os.chdir(working_path)
+    except:
+        sys.exit("ERROR: unable to switch to directory {}".format(working_path))
+        
+    stdout0, stderr0 = shell_util.run("git clone " + master_path)
+    print stdout0, stderr0
+    
+    # create (or add to) the .pyjournalrc file
+    try: f = open(defs["param_file"], "a+")             
+    except:
+        sys.exit("ERROR: unable to open {} for appending".format(defs["param_file"]))
+
+    f.write("[{}]\n".format(nickname))
+    f.write("master_path = {}\n".format(master_path))
+    f.write("working_path = {}\n".format(working_path))
+    f.write("\n")
+    f.close()
 
 
 def pull(nickname):
