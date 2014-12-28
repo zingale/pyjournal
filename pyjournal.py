@@ -1,14 +1,19 @@
+#!/usr/bin/env python
+
 """
 a simple commandline-driven scientific journal in LaTeX managed by git
 """
 
+import os
 import sys
 import argparse
-import textwrap
+
 import journal_git
 
 def entry(nickname, images):
 
+    # determine the filename and make the directory structure if necessary
+    
     # launch the editor specified in the EDITOR environment variable
     
     pass
@@ -42,6 +47,22 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
 
+    # parse the .pyjournalrc file -- store the results in a dictionary
+    # e.g., defs["nickname"]["working_path"]
+    defs = {}
+    defs["param_file"] = os.path.expanduser("~") + "/.pyjournalrc"
+
+    if os.path.isfile(defs["param_file"]):
+        cp = ConfigParser.ConfigParser()
+        cp.optionxform = str
+        cp.read(defs["param_file"])
+
+        for sec in cp.sections():
+            defs[sec] = {}
+            defs[sec]["working_path"] = cp.get(sec, "working_path")
+            defs[sec]["master_path"] = cp.get(sec, "master_path")
+            
+    
     nickname = args.n
     action = args.action[0]
     
@@ -65,11 +86,11 @@ if __name__ == "__main__":
         nickname = args.options[0]
         master_path = args.options[1]
         if len(args.options) == 3:
-            local_path = args.options[2]
+            working_path = args.options[2]
         else:
-            local_path = master_path
+            working_path = master_path
             
-        journal_git.init(nickname, master_path, local_path)
+        journal_git.init(nickname, master_path, working_path, defs)
 
         
     elif action == "connect":
@@ -80,9 +101,9 @@ if __name__ == "__main__":
 
         nickname = args.options[0]
         master_path = args.options[1]
-        local_path = args.options[2]
+        working_path = args.options[2]
         
-        journal_git.connect(nickname, master_path, local_path)
+        journal_git.connect(nickname, master_path, working_path)
 
         
     elif action == "entry":
