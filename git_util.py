@@ -76,6 +76,10 @@ def init(nickname, master_path, working_path, defs):
     
 def connect(nickname, master_repo, working_path, defs):
 
+    # make sure that a journal with this nickname doesn't already exist
+    if nickname in defs.keys():
+        sys.exit("ERROR: nickname already exists")
+    
     # does the nickname match the master repo name?
     
     # git clone the bare repo at master_repo into the working path

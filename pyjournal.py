@@ -133,7 +133,7 @@ if __name__ == "__main__":
             print "pyjournal"
             print "  current journal: {}".format(nickname)
             print "  working directory: {}/journal-{}".format(defs[nickname]["working_path"], nickname)
-            print "  master git repo: {}".format(defs[nickname]["master_path"], nickname)
+            print "  master git repo: {}".format(defs[nickname]["master_repo"], nickname)
             print " "
     else:
         sys.exit("invalid action")
