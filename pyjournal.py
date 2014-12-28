@@ -42,7 +42,8 @@ if __name__ == "__main__":
     # e.g., defs["nickname"]["working_path"]
     defs = {}
     defs["param_file"] = os.path.expanduser("~") + "/.pyjournalrc"
-
+    defs["image_dir"] = os.getcwd()
+    
     if os.path.isfile(defs["param_file"]):
         cp = ConfigParser.ConfigParser()
         cp.optionxform = str
@@ -58,6 +59,7 @@ if __name__ == "__main__":
     if nickname == None:
         journals = defs.keys()
         journals.remove("param_file")
+        journals.remove("image_dir")
         nickname = journals[0]
         
     action = args.action
