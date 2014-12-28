@@ -1,6 +1,7 @@
 import datetime
 import os
 import subprocess
+import sys
 
 def get_entry_string():
     now = datetime.datetime.now()
