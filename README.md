@@ -1,23 +1,27 @@
+# pyjournal
+
 pyjournal is a simple set of commandline scripts to create a
-LaTeX-based scientific journal that is managed via git so that we can
-easily log day-to-day activities from the commandline on any of our
-machines and have a consistent, searchable journal.
+LaTeX-based scientific journal that is managed via `git` so that we
+can easily log day-to-day activities from the commandline on any of
+our machines and have a consistent, searchable journal.
 
 
-Starting:
+* Starting:
 
-  pyjournal.py init nickname path/ [working-path]
+  -- `pyjournal.py init nickname path/ [working-path]`
 
-    this initializes a bare git repo that will hold the journal data
-    it will also add to (or create) a .pyjournal file with an entry
+     this initializes a bare git repo that will hold the journal data
+     it will also add to (or create) a .pyjournal file with an entry
 
-    creating a bare repo for others to clone to/from:
+     creating a bare repo for others to clone to/from:
 
-      cd path/
-      mkdir nickname.git
-      cd nickname.git
-      git init --bare
-
+     ```
+     cd path/
+     mkdir nickname.git
+     cd nickname.git
+     git init --bare
+     ```
+     
     creating the working directory that we will interact with:
 
       cd working-path/
@@ -66,9 +70,9 @@ Day-to-day use:
     added as figures to the new entry
 
 
-  pyjournal.py [-n name] show
+  pyjournal.py [-n name] build
 
-    builds the journal and pops up evince 
+    builds the journal PDF
 
 
   pyjournal.py [-n name] pull
@@ -85,17 +89,19 @@ LaTeX structure:
    should be in book form with year as Chapter, month as section, day
    as subsection
 
-   each entry is in a separate .tex file (yyyy-mm-dd-hh-mm-ss.tex) to
-   avoid git sync issues (i.e. there should be no conflicts this way)
+   each entry is in a separate `.tex` file (`yyyy-mm-dd-hh-mm-ss.tex`)
+   to avoid `git` sync issues (i.e. there should be no conflicts this
+   way)
    
-   the build process will create a master file for each day that has
-   includes for each of the day's entries
+   the build process will create a master file for year and month that
+   has includes for each of the day's entries
 
 
 
- .pyjournal structure:
+`.pyjournal` structure:
 
+```
 [nickname]
-   remote = XXX    ; this is what we push to/pull from
-   local = YYY     ; this is the local directory we interact with on our machine
-
+   master_path = XXX    ; this is what we push to/pull from
+   working_path = YYY   ; local directory we interact with on our machine
+```
