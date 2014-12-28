@@ -52,8 +52,11 @@ journal_master = r"""
 
 \begin{titlepage}
 
+\vskip 2in
+
 \begin{center}
-{\Huge \textsf{Research Journal}}
+\ \\[2.5in]
+{\Huge \textsf{\bfseries Research Journal}}
 \end{center}
 
 \vfill

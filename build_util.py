@@ -11,6 +11,7 @@ def build(nickname, defs):
 
     entries = []
     years = []
+
     
     # get the list of directories in entries/
     for d in os.listdir(entry_dir):
@@ -22,6 +23,9 @@ def build(nickname, defs):
                 years.append(y)
 
 
+
+    print entries
+            
     os.chdir(entry_dir)
                 
     # years are chapters
@@ -54,10 +58,20 @@ def build(nickname, defs):
             if not m == current_month:
                 f.write("\\section{{{}}}\n".format(month[m]))
 
+            tex = []
             for t in os.listdir(e):
                 if t.endswith(".tex"):
-                    f.write("\\input{{entries/{}/{}}}\n".format(e, t))
+                    tex.append(t)
 
+            tex.sort()
+            for t in tex:
+                f.write("\\HRule\\\\ \n")
+                idx = t.rfind(".tex")
+                tout = t[:idx].replace("_", " ")
+                f.write("{{\\bf {} }}\\\\[0.5em] \n".format(tout))
+                f.write("\\input{{entries/{}/{}}}\n\n".format(e, t))
+                f.write("\\vskip 2em\n")
+                    
             f.write("\n")
             
         f.close()
