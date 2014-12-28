@@ -9,8 +9,8 @@ import sys
 import argparse
 import ConfigParser
 
-import journal_git
-import journal_entry
+import git_util
+import entry_util
 
 
 def build(nickname):
@@ -88,7 +88,7 @@ if __name__ == "__main__":
         else:
             working_path = master_path
             
-        journal_git.init(nickname, master_path, working_path, defs)
+        git_util.init(nickname, master_path, working_path, defs)
 
         
     elif action == "connect":
@@ -101,7 +101,7 @@ if __name__ == "__main__":
         master_path = args.options[1]
         working_path = args.options[2]
         
-        journal_git.connect(nickname, master_path, working_path)
+        git_util.connect(nickname, master_path, working_path)
 
         
     elif action == "entry":
@@ -112,7 +112,7 @@ if __name__ == "__main__":
         else:
             images = []
             
-        journal_entry.entry(nickname, images, defs)
+        entry_util.entry(nickname, images, defs)
 
         
     elif action == "build":
@@ -120,11 +120,11 @@ if __name__ == "__main__":
         
 
     elif action == "pull":
-        journal_git.pull(nickname)
+        git_util.pull(nickname)
 
         
     elif action == "push":
-        journal_git.push(nickname)
+        git_util.push(nickname)
 
         
     else:
