@@ -18,6 +18,12 @@ journal_master = r"""
 % LaTeX font                                                                    
 \usepackage{mathpazo}      
 
+% san-serif font
+\usepackage{helvet}
+
+\usepackage{sectsty}                                                            
+\allsectionsfont{\sffamily}    
+
 % URLs (special font for monospace)                                             
 \usepackage{inconsolata}                                                       
 \usepackage[T1]{fontenc}            
