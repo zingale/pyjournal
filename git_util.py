@@ -73,7 +73,7 @@ def init(nickname, master_path, working_path, defs):
     os.chdir(working_journal)
     
     stdout, stderr, rc = shell_util.run("git add journal.tex")
-    stdout, stderr, rc = shell_util.run("git commit journal.tex")
+    stdout, stderr, rc = shell_util.run("git commit -m 'initial journal.tex file' journal.tex")
     stdout, stderr, rc = shell_util.run("git push")
         
     
