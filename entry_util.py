@@ -59,6 +59,7 @@ def entry(nickname, images, defs, string=None):
     
     # if there are images, then copy them over and add the figure
     # headings to the entry
+    images_copied = []
     if len(images) > 0:        
         for n in range(len(images)):
 
@@ -81,7 +82,9 @@ def entry(nickname, images, defs, string=None):
                 print src
                 print dest
                 sys.exit("ERROR: unable to copy image {}".format(src))
-                
+
+            images_copied.append(im_copy)
+            
             # create a unique label for latex referencing
             idx = im.lower().rfind(".jpg")
             idx = max(idx, im.lower().rfind(".png"))
@@ -118,3 +121,8 @@ def entry(nickname, images, defs, string=None):
     stdout0, stderr0 = shell_util.run("git commit -m 'new entry' " + ofile)
 
     # commit any images too
+    for im in images_copied:
+        stdout0, stderr0 = shell_util.run("git add " + im)
+        stdout0, stderr0 = shell_util.run("git commit -m 'new image' " + im)
+
+
