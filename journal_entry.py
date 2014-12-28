@@ -43,6 +43,14 @@ def entry(nickname, images, defs, string=None):
                               stderr=subprocess.STDOUT)
         stdout0, stderr0 = p0.communicate()            
 
+    else:
+        try: f = open(odir + ofile, "w")             
+        except:
+            sys.exit("ERROR: unable to open {}".format(odir + ofile))
+
+        f.write(string)
+        f.close()
+        
         
     # commit the entry to the working git repo
     os.chdir(odir)
@@ -56,5 +64,5 @@ def entry(nickname, images, defs, string=None):
     p0 = subprocess.Popen(prog, stdout=subprocess.PIPE,
                           stderr=subprocess.STDOUT)
     stdout0, stderr0 = p0.communicate()            
-    print stdout0, stderr0
+
 
