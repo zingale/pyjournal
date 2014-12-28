@@ -67,11 +67,12 @@ def init(nickname, master_path, working_path, defs):
         f.write("{}\n".format(line.rstrip()))
 
     f.close()
-    
-    
-    # do a git push to make it synced
-    os.chdir(working_journal)
 
+
+    # add journal.tex to the repo and do a git push to make it synced
+    os.chdir(working_journal)
+    
+    stdout, stderr, rc = shell_util.run("git add journal.tex")
     stdout, stderr, rc = shell_util.run("git push")
         
     
