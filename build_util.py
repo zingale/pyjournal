@@ -1,4 +1,5 @@
 import os
+import subprocess
 import sys
 
 month = {"1": "January",
@@ -32,9 +33,6 @@ def build(nickname, defs):
             if not y in years:
                 years.append(y)
 
-
-
-    print entries
             
     os.chdir(entry_dir)
                 
@@ -86,4 +84,17 @@ def build(nickname, defs):
             
         f.close()
 
+        
+    # now do the latexing to get the PDF
+    build_dir = "{}/journal-{}/".format(defs[nickname]["working_path"], nickname)
+    os.chdir(build_dir)
+    
+    for i in range(3):
+        prog = ["pdflatex", "journal.tex"]
+        p0 = subprocess.Popen(prog, stdout=subprocess.PIPE,
+                              stderr=subprocess.STDOUT)
+        stdout0, stderr0 = p0.communicate()
+        
 
+    print "journal is located at {}/journal.pdf".format(build_dir)
+    
