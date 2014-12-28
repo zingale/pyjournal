@@ -6,9 +6,6 @@ import journal_entry
 
 def init(nickname, master_path, working_path, defs):
 
-    param_file = defs["param_file"]
-
-
     # make sure that a journal with this nickname doesn't already exist
     if nickname in defs.keys():
         sys.exit("ERROR: nickname already exists")
