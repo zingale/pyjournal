@@ -60,15 +60,26 @@ def entry(nickname, images, defs, string=None):
     # headings to the entry
     if len(images) > 0:        
         for n in range(len(images)):
-            # copy it
+
+            # does an image by that name already live in the dest
+            # directory?
             im = images[n]
             src = "{}/{}".format(defs["image_dir"], im)
             dest = odir
+
+            if os.path.isfile("{}/{}".format(dest, im)):
+                im_copy = "{}_{}".format(entry_id, im)
+            else:
+                im_copy = im
+
+            dest = "{}/{}".format(dest, im_copy)
+                              
+            # copy it
             try: shutil.copy(src, dest)
             except:
                 print src
                 print dest
-                sys.exit("ERROR: unable to copy image {}".format(im))
+                sys.exit("ERROR: unable to copy image {}".format(src))
                 
             # create a unique label for latex referencing
             idx = im.lower().rfind(".jpg")
@@ -80,7 +91,7 @@ def entry(nickname, images, defs, string=None):
 
             # add the figure text
             for l in figure_str.split("\n"):
-                f.write("{}\n".format(l.replace("@figname@", im).replace("@figlabel@", im0).rstrip()))
+                f.write("{}\n".format(l.replace("@figname@", im_copy).replace("@figlabel@", im0).rstrip()))
                 
 
     # add the entry id as a LaTeX comment
