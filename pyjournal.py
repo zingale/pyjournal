@@ -54,17 +54,9 @@ if __name__ == "__main__":
             defs[sec]["working_path"] = cp.get(sec, "working_path")
             defs[sec]["master_path"] = cp.get(sec, "master_path")
             
-    
-    nickname = args.n
-    if nickname == None:
-        journals = defs.keys()
-        journals.remove("param_file")
-        journals.remove("image_dir")
-        nickname = journals[0]
-        
+            
     action = args.action
 
-    
     if action == "help":
         if not len(args.options) == 1:
             sys.exit("ERROR: help requires an argument (the action)")
@@ -74,9 +66,16 @@ if __name__ == "__main__":
             sys.exit("ERROR: invalid action to requires help for")
         else:
             print help[help_action]
+            sys.exit()
 
-            
-    elif action == "init":
+    nickname = args.n
+    if nickname == None and not (action == "init" or action == "connect"):
+        journals = defs.keys()
+        journals.remove("param_file")
+        journals.remove("image_dir")
+        nickname = journals[0]
+                
+    if action == "init":
 
         # options: nickname path/ [working-path] 
         if not (len(args.options) >= 2 and len(args.options) <= 3):
