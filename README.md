@@ -56,9 +56,8 @@ our machines and have a consistent, searchable journal.
     entries/
       yyyy-mm-dd/
         entry-yyy-mm-dd-hh-ss.tex
-	 ...
+        ...
       yyyy-mm-dd/
-
 
     journal.tex
   ```
@@ -66,45 +65,45 @@ our machines and have a consistent, searchable journal.
 
 * Day-to-day use:
 
-  pyjournal.py [-n name] entry [XXX [YYY [ZZZ]]]
+  - `pyjournal.py [-n nickname] entry [XXX YYY ZZZ ...]`
   
-    adds an entry to the journal (optionally named "name") XXX, YYY,
-    and ZZZ are optional names of images that will automatically be
-    added as figures to the new entry
+    adds an entry to the journal (optionally named "nickname"). `XXX`,
+    `YYY`, and `ZZZ` are optional names of images that will
+    automatically be added as figures to the new entry
 
-
-  pyjournal.py [-n name] build
+  - `pyjournal.py [-n nickname] build`
 
     builds the journal PDF
 
+  - `pyjournal.py [-n nickname] pull`
 
-  pyjournal.py [-n name] pull
+     gets any changes from the master version of the journal (remote
+     git bare repository)
 
-     gets any changes from the remote git
+  - `pyjournal.py [-n nickname] push`
 
+    pushes any changes in the local journal to the remote (git bare
+    repo) version
+ 
 
-  pyjournal.py [-n name] push
+* LaTeX structure:
 
+  The journal is in book form with the year as a chapter and month as
+  a section.  The individual entries are separated with a horizontal
+  rule and noted with the time of the entry.
 
-
-LaTeX structure:
-
-   should be in book form with year as Chapter, month as section, day
-   as subsection
-
-   each entry is in a separate `.tex` file (`yyyy-mm-dd-hh-mm-ss.tex`)
-   to avoid `git` sync issues (i.e. there should be no conflicts this
-   way)
+  Each entry is in a separate `.tex` file (`yyyy-mm-dd-hh-mm-ss.tex`)
+  to avoid `git` sync issues (i.e. there should be no conflicts this
+  way)
    
-   the build process will create a master file for year and month that
-   has includes for each of the day's entries
+  The build process will create a master file for year and month that
+  has includes for each of the day's entries
 
 
+* `.pyjournal` structure:
 
-`.pyjournal` structure:
-
-```
-[nickname]
-   master_path = XXX    ; this is what we push to/pull from
-   working_path = YYY   ; local directory we interact with on our machine
-```
+  ```
+  [nickname]
+  master_path = XXX    ; this is what we push to/pull from
+  working_path = YYY   ; local directory we interact with on our machine
+  ```
