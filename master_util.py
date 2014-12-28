@@ -69,6 +69,8 @@ journal_master = r"""
 
 \clearpage
 
+\mainmatter
+
 \input entries/chapters.tex
 
 \end{document}

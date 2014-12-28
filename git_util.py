@@ -68,8 +68,8 @@ def init(nickname, master_path, working_path, defs):
     except:
         sys.exit("ERROR: unable to open {}/journal.tex".format(working_journal))
 
-    for line in master_util.journal_master:
-        f.write(line)
+    for line in master_util.journal_master.split("\n"):
+        f.write("{}\n".format(line.rstrip()))
 
     f.close()
     
