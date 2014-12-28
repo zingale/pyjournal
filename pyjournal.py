@@ -10,14 +10,7 @@ import argparse
 import ConfigParser
 
 import journal_git
-
-def entry(nickname, images):
-
-    # determine the filename and make the directory structure if necessary
-    
-    # launch the editor specified in the EDITOR environment variable
-    
-    pass
+import journal_entry
 
 
 def build(nickname):
@@ -65,6 +58,9 @@ if __name__ == "__main__":
             
     
     nickname = args.n
+    if nickname == None:
+        nickname = defs.keys()[0]
+        
     action = args.action
 
     
@@ -116,7 +112,7 @@ if __name__ == "__main__":
         else:
             images = []
             
-        entry(nickname, images)
+        journal_entry.entry(nickname, images, defs)
 
         
     elif action == "build":

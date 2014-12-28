@@ -7,7 +7,7 @@ def init(nickname, master_path, working_path, defs):
     param_file = defs["param_file"]
     
     # create the bare git repo
-    git_master = os.path.normpath(master_path) + "/" + nickname + ".git"
+    git_master = "{}/journal-{}.git".format(os.path.normpath(master_path), nickname)
     try: os.mkdir(git_master)
     except:
         sys.exit("ERROR: unable to create a directory in {}".format(master_path))
@@ -31,7 +31,12 @@ def init(nickname, master_path, working_path, defs):
     
 
     # create the initial directory structure
-
+    working_journal = "{}/journal-{}".format(os.path.normpath(working_path), nickname)
+    
+    try: os.mkdir(working_journal + "/entries/")
+    except:
+        sys.exit("ERROR: unable to create initial directory structure")
+                  
     # create an initial entry saying "journal created"
 
     # copy over the journal.tex
