@@ -68,7 +68,10 @@ def init(nickname, master_path, working_path, defs):
     except:
         sys.exit("ERROR: unable to open {}/journal.tex".format(working_journal))
 
-    f.write(master_util.journal_master)
+    for line in master_util.journal_master:
+        f.write(line)
+
+    f.close()
     
     
     # do a git push to make it synced

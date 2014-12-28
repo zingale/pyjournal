@@ -48,7 +48,7 @@ journal_master = r"""
 
 \begin{document}
 
-\frontmatter}
+\frontmatter
 
 \begin{titlepage}
 
