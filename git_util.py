@@ -116,13 +116,37 @@ def connect(master_repo, working_path, defs):
     f.close()
 
 
-def pull(nickname):
+def pull(nickname, defs):
 
-    pass
+    # switch to the working directory and pull from the master
+    wd = "{}/journal-{}".format(defs[nickname]["working_path"], nickname)
 
+    try: os.chdir(wd)
+    except:
+        sys.exit("ERROR: unable to switch to working directory: {}".format(wd))
 
-def push(nickname):
+    stdout, stderr, rc = shell_util.run("git pull")
+    if not rc == 0:
+        print stderr
+        sys.exit("ERROR: something went wrong with the git pull")
 
-    pass
+    print stdout
+    
+
+def push(nickname, defs):
+
+    # switch to the working directory and push to the master
+    wd = "{}/journal-{}".format(defs[nickname]["working_path"], nickname)    
+
+    try: os.chdir(wd)
+    except:
+        sys.exit("ERROR: unable to switch to working directory: {}".format(wd))
+
+    stdout, stderr, rc = shell_util.run("git push")
+    if not rc == 0:
+        print stderr
+        sys.exit("ERROR: something went wrong with the git push")
+
+    print stderr
 
 

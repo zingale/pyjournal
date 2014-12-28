@@ -120,11 +120,11 @@ if __name__ == "__main__":
         
 
     elif action == "pull":
-        git_util.pull(nickname)
+        git_util.pull(nickname, defs)
 
         
     elif action == "push":
-        git_util.push(nickname)
+        git_util.push(nickname, defs)
 
 
     elif action == "status":
