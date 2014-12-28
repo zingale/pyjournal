@@ -3,6 +3,7 @@ import subprocess
 import sys
 
 import entry_util
+import master_util
 
 def init(nickname, master_path, working_path, defs):
 
@@ -63,7 +64,12 @@ def init(nickname, master_path, working_path, defs):
 
     
     # copy over the journal.tex
+    try: f = open("{}/journal.tex".format(working_journal), "w")
+    except:
+        sys.exit("ERROR: unable to open {}/journal.tex".format(working_journal))
 
+    f.write(master_util.journal_master)
+    
     
     # do a git push to make it synced
     os.chdir(working_journal)
