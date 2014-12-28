@@ -37,7 +37,7 @@ our machines and have a consistent, searchable journal.
     working_path = /working-path/
     ```
 
-  - `pyjournal.py connect git-path local-path`
+  - `pyjournal.py connect git-path/journal-nickname.git local-path`
 
     this will create a clone of a journal on a remote machine (if you
     are only working on a single machine, then you don't need to do this).
