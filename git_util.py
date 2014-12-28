@@ -2,7 +2,7 @@ import os
 import subprocess
 import sys
 
-import journal_entry
+import entry_util
 
 def init(nickname, master_path, working_path, defs):
 
@@ -59,7 +59,7 @@ def init(nickname, master_path, working_path, defs):
     
     # create an initial entry saying "journal created"
     images = []
-    journal_entry.entry(nickname, images, defs, string="journal created")
+    entry_util.entry(nickname, images, defs, string="journal created")
 
     
     # copy over the journal.tex

@@ -9,13 +9,10 @@ import sys
 import argparse
 import ConfigParser
 
-import git_util
+import build_util
 import entry_util
+import git_util
 
-
-def build(nickname):
-
-    pass
 
 
 
@@ -116,7 +113,7 @@ if __name__ == "__main__":
 
         
     elif action == "build":
-        build(nickname)
+        build_util.build(nickname, defs)
         
 
     elif action == "pull":
