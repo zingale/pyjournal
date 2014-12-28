@@ -111,18 +111,18 @@ def entry(nickname, images, defs, string=None):
         else:
             prog = "{} {}/{}".format(editor, odir, ofile)
             
-        stdout0, stderr0 = shell_util.run(prog)
+        stdout, stderr, rc = shell_util.run(prog)
         
         
     # commit the entry to the working git repo
     os.chdir(odir)
     
-    stdout0, stderr0 = shell_util.run("git add " + ofile)
-    stdout0, stderr0 = shell_util.run("git commit -m 'new entry' " + ofile)
+    stdout, stderr, rc = shell_util.run("git add " + ofile)
+    stdout, stderr, rc = shell_util.run("git commit -m 'new entry' " + ofile)
 
     # commit any images too
     for im in images_copied:
-        stdout0, stderr0 = shell_util.run("git add " + im)
-        stdout0, stderr0 = shell_util.run("git commit -m 'new image' " + im)
+        stdout, stderr, rc = shell_util.run("git add " + im)
+        stdout, stderr, rc = shell_util.run("git commit -m 'new image' " + im)
 
 

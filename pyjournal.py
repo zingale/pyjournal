@@ -19,7 +19,7 @@ import git_util
 if __name__ == "__main__":
 
     help = {"init": "options: nickname path/ [working-path] -- initialize a journal\n",
-            "connect": "options: nickname remote-git-repo local-path/ -- connect to a remote journal for local editing\n",
+            "connect": "options: remote-git-repo local-path/ -- connect to a remote journal for local editing\n",
             "entry": "options: [image1 image2 image3 ...] -- add a new entry, with optional images\n",
             "build": "no options -- build a PDF of the journal",
             "pull": "no options -- pull from the remote journal",
@@ -95,14 +95,13 @@ if __name__ == "__main__":
     elif action == "connect":
 
         # options: git-path/ local-path/
-        if not len(args.options) == 3:
+        if not len(args.options) == 2:
             sys.exit("ERROR: invalid number of options for 'connect'\n{}".format(help["connect"]))
 
-        nickname = args.options[0]
-        master_repo = args.options[1]
-        working_path = args.options[2]
+        master_repo = args.options[0]
+        working_path = args.options[1]
         
-        git_util.connect(nickname, master_repo, working_path, defs)
+        git_util.connect(master_repo, working_path, defs)
 
         
     elif action == "entry":

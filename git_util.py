@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 
 import entry_util
@@ -18,7 +19,7 @@ def init(nickname, master_path, working_path, defs):
         sys.exit("ERROR: unable to create a directory in {}".format(master_path))
 
     os.chdir(git_master)
-    stdout0, stderr0 = shell_util.run("git init --bare")
+    stdout, stderr, rc = shell_util.run("git init --bare")
     
 
     # create the local working copy
@@ -26,7 +27,7 @@ def init(nickname, master_path, working_path, defs):
     except:
         sys.exit("ERROR: unable to change to {}".format(working_path))
 
-    stdout0, stderr0 = shell_util.run("git clone " + git_master)
+    stdout, stderr, rc = shell_util.run("git clone " + git_master)
     
 
     # create the initial directory structure
@@ -71,24 +72,37 @@ def init(nickname, master_path, working_path, defs):
     # do a git push to make it synced
     os.chdir(working_journal)
 
-    stdout0, stderr0 = shell_util.run("git push")
+    stdout, stderr, rc = shell_util.run("git push")
         
     
-def connect(nickname, master_repo, working_path, defs):
+def connect(master_repo, working_path, defs):
 
+    # get the nickname from the master repo name
+    re_name = r"journal-(.*).git"
+    a = re.search(re_name, master_repo)
+
+    if not a == None: 
+        nickname = a.group(1)
+    else:
+        sys.exit("ERROR: the remote-git-repo should be of the form: ssh://machine/dir/journal-nickname.git")
+    
     # make sure that a journal with this nickname doesn't already exist
     if nickname in defs.keys():
         sys.exit("ERROR: nickname already exists")
     
     # does the nickname match the master repo name?
-    
+    if not "journal-{}.git".format(nickname) in master_repo:
+        sys.exit("ERROR: nickname must match remote repo name")
+                 
     # git clone the bare repo at master_repo into the working path
     try: os.chdir(working_path)
     except:
         sys.exit("ERROR: unable to switch to directory {}".format(working_path))
         
-    stdout0, stderr0 = shell_util.run("git clone " + master_repo)
-    print stdout0, stderr0
+    stdout, stderr, rc = shell_util.run("git clone " + master_repo)
+    if not rc == 0:
+        print stderr
+        sys.exit("ERROR: something went wrong with the git clone")
     
     # create (or add to) the .pyjournalrc file
     try: f = open(defs["param_file"], "a+")             

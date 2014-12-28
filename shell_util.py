@@ -9,4 +9,4 @@ def run(string):
     p0 = subprocess.Popen(prog, stdout=subprocess.PIPE,
                           stderr=subprocess.PIPE)
     stdout0, stderr0 = p0.communicate()
-    return stdout0, stderr0
+    return stdout0, stderr0, p0.returncode
