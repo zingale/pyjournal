@@ -11,7 +11,7 @@ our machines and have a consistent, searchable journal.
   - `pyjournal.py init nickname path/ [working-path]`
 
     this initializes a bare git repo that will hold the journal data
-    it will also add to (or create) a .pyjournal file with an entry
+    it will also add to (or create) a `.pyjournal` file with an entry
 
     creating a bare repo for others to clone to/from:
 
@@ -24,44 +24,47 @@ our machines and have a consistent, searchable journal.
      
     creating the working directory that we will interact with:
 
-      cd working-path/
-      git clone path/nicknmae
+    ```
+    cd working-path/
+    git clone path/nicknmae
+    ```
 
-    contents of the .pyjournal
+    contents of the `.pyjournal`
 
-      [nickname]
-      master = /path/nickname.git
-      working = /working-path/nickname
+    ```
+    [nickname]
+    master_path = /path/nickname.git
+    working_path = /working-path/nickname
+    ```
 
-
-  pyjournal.py connect git-path local-path
+  - `pyjournal.py connect git-path local-path`
 
     this will create a clone of a journal on a remote machine (if you
     are only working on a single machine, then you don't need to do this).
 
-      [nickname]
-      master = git-path
-      working = local-path
-      
+    ```
+    [nickname]
+    master_path = git-path
+    working_path = local-path
+    ```  
 
+* Directory structure:
 
-file structure:
-
-  journal-name/
+  ```
+  journal-nickname/
 
     entries/
-       yyyy-mm-dd/
-         entry-yyy-mm-dd-hh-ss.tex
+      yyyy-mm-dd/
+        entry-yyy-mm-dd-hh-ss.tex
 	 ...
-       yyyy-mm-dd/
+      yyyy-mm-dd/
 
 
     journal.tex
-    GNUmakefile
+  ```
 
 
-
-Day-to-day use:
+* Day-to-day use:
 
   pyjournal.py [-n name] entry [XXX [YYY [ZZZ]]]
   
