@@ -19,7 +19,7 @@ import git_util
 if __name__ == "__main__":
 
     help = {"init": "options: nickname path/ [working-path] -- initialize a journal\n",
-            "connect": "options: nickname git-path/ local-path/ -- connect to a remote journal for local editing\n",
+            "connect": "options: nickname remote-git-repo local-path/ -- connect to a remote journal for local editing\n",
             "entry": "options: [image1 image2 image3 ...] -- add a new entry, with optional images\n",
             "build": "no options -- build a PDF of the journal",
             "pull": "no options -- pull from the remote journal",
@@ -53,7 +53,7 @@ if __name__ == "__main__":
         for sec in cp.sections():
             defs[sec] = {}
             defs[sec]["working_path"] = cp.get(sec, "working_path")
-            defs[sec]["master_path"] = cp.get(sec, "master_path")
+            defs[sec]["master_repo"] = cp.get(sec, "master_repo")
             
             
     action = args.action
@@ -99,10 +99,10 @@ if __name__ == "__main__":
             sys.exit("ERROR: invalid number of options for 'connect'\n{}".format(help["connect"]))
 
         nickname = args.options[0]
-        master_path = args.options[1]
+        master_repo = args.options[1]
         working_path = args.options[2]
         
-        git_util.connect(nickname, master_path, working_path, defs)
+        git_util.connect(nickname, master_repo, working_path, defs)
 
         
     elif action == "entry":
@@ -133,7 +133,7 @@ if __name__ == "__main__":
             print "pyjournal"
             print "  current journal: {}".format(nickname)
             print "  working directory: {}/journal-{}".format(defs[nickname]["working_path"], nickname)
-            print "  master git repo: {}/journal-{}.git".format(defs[nickname]["working_path"], nickname)
+            print "  master git repo: {}".format(defs[nickname]["master_path"], nickname)
             print " "
     else:
         sys.exit("invalid action")

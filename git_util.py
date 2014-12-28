@@ -43,14 +43,14 @@ def init(nickname, master_path, working_path, defs):
         sys.exit("ERROR: unable to open {} for appending".format(defs["param_file"]))
 
     f.write("[{}]\n".format(nickname))
-    f.write("master_path = {}\n".format(master_path))
+    f.write("master_repo = {}\n".format(git_master))
     f.write("working_path = {}\n".format(working_path))
     f.write("\n")
     f.close()
 
     defs[nickname] = {}
+    defs[nickname]["master_repo"] = git_master
     defs[nickname]["working_path"] = working_path
-    defs[nickname]["master_path"] = master_path
     
     # create an initial entry saying "journal created"
     images = []
@@ -74,16 +74,16 @@ def init(nickname, master_path, working_path, defs):
     stdout0, stderr0 = shell_util.run("git push")
         
     
-def connect(nickname, master_path, working_path, defs):
+def connect(nickname, master_repo, working_path, defs):
 
-    # does the nickname match the master path name?
+    # does the nickname match the master repo name?
     
-    # git clone the bare repo at master_path into the working path
+    # git clone the bare repo at master_repo into the working path
     try: os.chdir(working_path)
     except:
         sys.exit("ERROR: unable to switch to directory {}".format(working_path))
         
-    stdout0, stderr0 = shell_util.run("git clone " + master_path)
+    stdout0, stderr0 = shell_util.run("git clone " + master_repo)
     print stdout0, stderr0
     
     # create (or add to) the .pyjournalrc file
@@ -92,7 +92,7 @@ def connect(nickname, master_path, working_path, defs):
         sys.exit("ERROR: unable to open {} for appending".format(defs["param_file"]))
 
     f.write("[{}]\n".format(nickname))
-    f.write("master_path = {}\n".format(master_path))
+    f.write("master_repo = {}\n".format(master_repo))
     f.write("working_path = {}\n".format(working_path))
     f.write("\n")
     f.close()
