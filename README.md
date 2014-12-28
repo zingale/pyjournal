@@ -33,8 +33,8 @@ our machines and have a consistent, searchable journal.
 
     ```
     [nickname]
-    master_path = /path/nickname.git
-    working_path = /working-path/nickname
+    master_repo = /path/nickname.git
+    working_path = /working-path/
     ```
 
   - `pyjournal.py connect git-path local-path`
@@ -44,8 +44,8 @@ our machines and have a consistent, searchable journal.
 
     ```
     [nickname]
-    master_path = git-path
-    working_path = local-path
+    master_path = git-path/git-repo.git
+    working_path = local-path/
     ```  
 
 * Directory structure:
@@ -104,6 +104,6 @@ our machines and have a consistent, searchable journal.
 
   ```
   [nickname]
-  master_path = XXX    ; this is what we push to/pull from
-  working_path = YYY   ; local directory we interact with on our machine
+  master_repo = XXX.git  ; this is what we push to/pull from
+  working_path = YYY     ; local directory we interact with on our machine
   ```
