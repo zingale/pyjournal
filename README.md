@@ -10,26 +10,33 @@ our machines and have a consistent, searchable journal.
 
   - `pyjournal.py init nickname path/ [working-path]`
 
-    this initializes a bare git repo that will hold the journal data
-    it will also add to (or create) a `.pyjournal` file with an entry
+    this initializes a bare git repo that will hold the journal data,
+    creates the initial directory structure to hold the journal
+    entries, and copies in the master journal.tex file.  It will also
+    add to (or create) a `.pyjournal` file with an entry
 
-    creating a bare repo for others to clone to/from:
+    The master bare git repo is placed in `path`.  The working clone
+    that we interact with is placed there too, unless we specify the
+    optional `working-path` argument.
+    
+    The `git` operations that take place under the hood are:
+    
+      - Creating a bare repo for others to clone to/from:
 
-    ```
-    cd path/
-    mkdir nickname.git
-    cd nickname.git
-    git init --bare
-    ```
+        ```
+        mkdir path/nickname.git
+        cd path/nickname.git
+        git init --bare
+        ```
      
-    creating the working directory that we will interact with:
+      - Creating the working directory that we will interact with:
 
-    ```
-    cd working-path/
-    git clone path/nicknmae
-    ```
+        ```
+        cd working-path/
+        git clone path/nicknmae
+        ```
 
-    contents of the `.pyjournal`
+    The contents of the `.pyjournal` are
 
     ```
     [nickname]
