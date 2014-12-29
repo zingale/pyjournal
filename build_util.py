@@ -34,7 +34,10 @@ def build(nickname, defs, show=0):
 
             
     os.chdir(entry_dir)
-                
+
+    years.sort()
+    entries.sort()
+    
     # years are chapters
     try: f = open("chapters.tex", "w")
     except:
