@@ -81,18 +81,24 @@ our machines and have a consistent, searchable journal.
 
 * Day-to-day use:
 
-  - `pyjournal.py [-n nickname] entry [XXX YYY ZZZ ...]`
+  - `pyjournal.py [-n nickname] entry [XXX YYY ZZZ ...]` or
+    `pyjournal [-n nickname]`
   
     adds an entry to the journal (optionally named "nickname"). `XXX`,
     `YYY`, and `ZZZ` are optional names of images that will
     automatically be added as figures to the new entry
 
     Note: you can run `pyjournal.py` without any action, and it will
-    default to `entry`.
+    default to `entry`, but you don't have the option for images.
 
   - `pyjournal.py [-n nickname] build`
 
     builds the journal PDF
+
+  - `pyjournal.py [-n nickname] show`
+
+    builds the journal PDF and launches the `evince` viewer in the
+    background to display it.
 
   - `pyjournal.py [-n nickname] pull`
 
