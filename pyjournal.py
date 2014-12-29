@@ -18,23 +18,50 @@ import git_util
 
 if __name__ == "__main__":
 
-    help = {"init": "options: nickname path/ [working-path] -- initialize a journal\n",
-            "connect": "options: remote-git-repo local-path/ -- connect to a remote journal for local editing\n",
-            "entry": "options: [image1 image2 image3 ...] -- add a new entry, with optional images\n",
-            "build": "no options -- build a PDF of the journal",
-            "pull": "no options -- pull from the remote journal",
-            "push": "no options -- push local changes to the remote journal",
-            "status": "no options -- list the current journal information"}
+    help = {"init":
+              "initialize a journal\n" + 
+              "options: nickname path/ [working-path]\n",
+
+            "connect":
+              "connect to a remote journal for local editing\n" +
+              "options: remote-git-repo local-path/\n",
+
+            "entry":
+              "add a new entry, with optional images\n" +
+              "options: [image1 [image2 ... ]]\n",
+
+            "build":
+              "build a PDF of the journal\n" +
+              "no options\n",
+
+            "pull":
+              "pull from the remote journal\n" +
+              "no options\n",
+
+            "push":
+              "push local changes to the remote journal\n" +
+              "no options\n",
+
+            "status":
+              "list the current journal information\n" +
+              "no options\n",
+
+            "show":
+              "build the PDF and launch a PDF viewer\n" +
+              "no options\n"}
     
     parser = argparse.ArgumentParser()
-    parser.add_argument("-n", help="nickname of the journal", type=str, default=None)
+    parser.add_argument("-n", help="nickname of the journal",
+                        type=str, default=None)
 
-    parser.add_argument("action", metavar="action", type=str, nargs="?", default="entry", 
-                        help="one of the allowable actions: init, connect, entry, help, build, pull, push, status")
+    parser.add_argument("action", metavar="action",
+                        type=str, nargs="?", default="entry", 
+                        help="an action: {}".format(help.keys()))
 
-    parser.add_argument("options", metavar="action-options", type=str,
+    parser.add_argument("options", metavar="options", type=str,
                         default=None, nargs="*",
-                        help="most actions take actions, do 'pyjournal.py help action' to see the options for an action")
+                        help="options for the actions.  " + \
+                             "'pyjournal.py help action' lists options")
                         
     args = parser.parse_args()
 
@@ -62,11 +89,11 @@ if __name__ == "__main__":
         if not len(args.options) == 1:
             sys.exit("ERROR: help requires an argument (the action)")
                      
-        help_action = args.options[0]
-        if not help_action in help.keys():
+        ha = args.options[0]
+        if not ha in help.keys():
             sys.exit("ERROR: invalid action to requires help for")
         else:
-            print help[help_action]
+            print "pyjournal.py {} options: {}\n".format(ha, help[ha])
             sys.exit()
 
     nickname = args.n
@@ -80,7 +107,8 @@ if __name__ == "__main__":
 
         # options: nickname path/ [working-path] 
         if not (len(args.options) >= 2 and len(args.options) <= 3):
-            sys.exit("ERROR: invalid number of options for 'init'\n{}".format(help["init"]))
+            print "ERROR: invalid number of options for 'init'"
+            sys.exit("{}".format(help["init"]))
 
         nickname = args.options[0]
         master_path = args.options[1]
@@ -91,18 +119,17 @@ if __name__ == "__main__":
             
         git_util.init(nickname, master_path, working_path, defs)
 
-        
     elif action == "connect":
 
         # options: git-path/ local-path/
         if not len(args.options) == 2:
-            sys.exit("ERROR: invalid number of options for 'connect'\n{}".format(help["connect"]))
+            print "ERROR: invalid number of options for 'connect'"
+            sys.exit("{}".format(help["connect"]))
 
         master_repo = args.options[0]
         working_path = args.options[1]
         
         git_util.connect(master_repo, working_path, defs)
-
         
     elif action == "entry":
         
@@ -113,19 +140,18 @@ if __name__ == "__main__":
             images = []
             
         entry_util.entry(nickname, images, defs)
-
         
     elif action == "build":
         build_util.build(nickname, defs)
-        
 
+    elif action == "show":
+        build_util.build(nickname, defs, show=1)        
+        
     elif action == "pull":
         git_util.pull(nickname, defs)
-
         
     elif action == "push":
         git_util.push(nickname, defs)
-
 
     elif action == "status":
         if nickname in defs.keys():

@@ -16,7 +16,7 @@ month = {"1": "January",
          "11": "November",
          "12": "December"}
 
-def build(nickname, defs):
+def build(nickname, defs, show=0):
 
     entry_dir = "{}/journal-{}/entries/".format(defs[nickname]["working_path"], nickname)
 
@@ -100,5 +100,8 @@ def build(nickname, defs):
         print stdout
         sys.exit("There were LaTeX errors")
 
-
+    # show it in a PDF viewer
+    if show == 1:
+        print "evince {} &".format(pdf)
+        stdout, stderr, rc = shell_util.run("evince {}".format(pdf))
     
