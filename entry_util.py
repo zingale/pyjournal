@@ -189,7 +189,9 @@ def elist(nickname, num, defs):
     e.sort(reverse=True)
 
     for n in range(min(num, len(e))):
-        print "{}: {}".format(e[n], entries[e[n]])
+        idx = e[n].rfind(".tex")
+        entry_id = e[n][:idx]
+        print "{}: {}".format(entry_id, entries[e[n]])
         
     
 
