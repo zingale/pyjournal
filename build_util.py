@@ -64,7 +64,8 @@ def build(nickname, defs, show=0):
 
             if not m == current_month:
                 f.write("\\section{{{}}}\n".format(month[m]))
-
+                current_month = m
+                
             tex = []
             for t in os.listdir(e):
                 if t.endswith(".tex"):
@@ -98,7 +99,11 @@ def build(nickname, defs, show=0):
         print "journal is located at {}".format(pdf)
     else:
         print stdout
-        sys.exit("There were LaTeX errors")
+        print "There were LaTeX errors"
+        print "Check the source in {}/entries/".format(build_dir)
+        print "be sure to 'git commit' to store any fixes"
+        sys.exit()
+
 
     # show it in a PDF viewer
     if show == 1:
