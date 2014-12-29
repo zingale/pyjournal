@@ -126,3 +126,48 @@ def entry(nickname, images, defs, string=None):
         stdout, stderr, rc = shell_util.run("git commit -m 'new image' " + im)
 
 
+def edit(nickname, date_string, defs):
+
+    # find the file corresponding to the date string
+    entry_dir = "{}/journal-{}/entries/".format(defs[nickname]["working_path"], nickname)
+
+    try: d, t = date_string.split(" ")
+    except:
+        sys.exit("invalid date string")
+            
+    if not os.path.isdir(d):
+        sys.exit("entry directory does not exist")
+
+    file = "{}/{}_{}.tex".format(d, d, t)
+    
+    # git commit any changes
+    if not os.path.isfile(file):
+        sys.exit("entry {} does not exist".format(file))
+
+    # open the file for appending        
+    try: editor = os.environ["EDITOR"]
+    except:
+        editor = "emacs"
+
+    entry_id = get_entry_string()
+
+    try: f = open(file, "a+")             
+    except:
+        sys.exit("ERROR: unable to open {}".format(file))
+
+    f.write("\n\n% entry edited: {}".format(entry_id))    
+    f.close()
+
+    if editor == "emacs":
+        prog = "{} {}".format("emacs -nw", file)
+    else:
+        prog = "{} {}".format(editor, file)
+        
+    stdout, stderr, rc = shell_util.run(prog)
+
+    stdout, stderr, rc = shell_util.run("git commit -m 'edited entry' " + file)
+    
+    
+
+        
+    

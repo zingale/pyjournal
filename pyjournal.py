@@ -30,6 +30,10 @@ if __name__ == "__main__":
               "add a new entry, with optional images\n" +
               "options: [image1 [image2 ... ]]\n",
 
+            "edit":
+              "edit an existing entry\n" +
+              "options: 'yyyy-mm-dd hh.mm.ss'\n",
+            
             "build":
               "build a PDF of the journal\n" +
               "no options\n",
@@ -140,6 +144,17 @@ if __name__ == "__main__":
             images = []
             
         entry_util.entry(nickname, images, defs)
+
+    elif action == "edit":
+        
+        # options: date-string
+        if not len(args.options) == 1:
+            print "ERROR: edit requires a single argument"
+            sys.exit("{}".format(help["edit"]))
+
+        date_string = args.options[0]
+        
+        entry_util.edit(nickname, date_string, defs)
         
     elif action == "build":
         build_util.build(nickname, defs)
