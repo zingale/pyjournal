@@ -64,6 +64,7 @@ if __name__ == "__main__":
 
     parser.add_argument("action", metavar="action",
                         type=str, nargs="?", default="entry", 
+                        choices=help.keys(),
                         help="an action: {}".format(help.keys()))
 
     parser.add_argument("options", metavar="options", type=str,
@@ -190,5 +191,7 @@ if __name__ == "__main__":
             print "  master git repo: {}".format(defs[nickname]["master_repo"], nickname)
             print " "
     else:
+        # we should never land here, because of the choices argument
+        # to actions in the argparser
         sys.exit("invalid action")
 
