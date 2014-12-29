@@ -44,14 +44,23 @@ our machines and have a consistent, searchable journal.
     working_path = /working-path/
     ```
 
-  - `pyjournal.py connect git-path/journal-nickname.git local-path`
+  - `pyjournal.py connect ssh://remote-machine:/git-path/journal-nickname.git local-path`
 
-    this will create a clone of a journal on a remote machine (if you
-    are only working on a single machine, then you don't need to do this).
+    If you already established a journal on another machine (using the
+    `init` action, then `connect` is used to create a clone of that
+    journal on your local machine (if you are only working on a single
+    machine, then you don't need to do this).
 
+    Note that for the remote git repo is specified as the complete path
+    (including the `ssh://` prefix) to the `.git` bare repo.  The nickname
+    for the journal is taken from the repo name.
+    
+    Only a working repo is stored locally (created though a `git clone`).
+    In this case, your `.pyjournalrc` will look like:
+    
     ```
     [nickname]
-    master_path = git-path/git-repo.git
+    master_path = ssh://remote-machine:/git-path/git-repo.git
     working_path = local-path/
     ```  
 
@@ -62,7 +71,7 @@ our machines and have a consistent, searchable journal.
 
     entries/
       yyyy-mm-dd/
-        entry-yyy-mm-dd-hh-ss.tex
+        yyy-mm-dd-hh-ss.tex
         ...
       yyyy-mm-dd/
 
@@ -77,6 +86,9 @@ our machines and have a consistent, searchable journal.
     adds an entry to the journal (optionally named "nickname"). `XXX`,
     `YYY`, and `ZZZ` are optional names of images that will
     automatically be added as figures to the new entry
+
+    Note: you can run `pyjournal.py` without any action, and it will
+    default to `entry`.
 
   - `pyjournal.py [-n nickname] build`
 
