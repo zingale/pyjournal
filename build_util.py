@@ -102,6 +102,5 @@ def build(nickname, defs, show=0):
 
     # show it in a PDF viewer
     if show == 1:
-        print "evince {} &".format(pdf)
-        stdout, stderr, rc = shell_util.run("evince {}".format(pdf))
+        os.system("evince {} &".format(pdf))
     
