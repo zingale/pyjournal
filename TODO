@@ -1,5 +1,7 @@
 -- deal with the options for the individal actions and their options by
    doing nested parsers like shown in http://pymotw.com/2/argparse/
 
-
+-- detect if the necessary latex packages are installed.  Perhaps by using
+   kpsewhich
+   
 
