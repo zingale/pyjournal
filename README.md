@@ -91,6 +91,14 @@ our machines and have a consistent, searchable journal.
     Note: you can run `pyjournal.py` without any action, and it will
     default to `entry`, but you don't have the option for images.
 
+  - `pyjournal.py [-n nickname] edit 'yyyy-mm-dd hh.mm.ss'`
+
+    edit the entry corresponding to the date/time string in the journal.
+    This adds a comment to the LaTeX indicating the time of the edit
+    and pops up an editor window with the entry for revision.  Since the
+    new changes are committed to the git repo, the history of changes to
+    the entry are preserved in the git history.
+    
   - `pyjournal.py [-n nickname] build`
 
     builds the journal PDF
