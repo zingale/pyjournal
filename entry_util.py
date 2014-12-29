@@ -1,4 +1,5 @@
 import datetime
+import hashlib
 import os
 import shutil
 import sys
@@ -103,7 +104,10 @@ def entry(nickname, images, defs, string=None):
 
     f.close()
         
-        
+    # get the hash for the file
+    hash_orig = hashlib.md5(open(odir + ofile, 'r').read()).hexdigest()
+
+    
     # launch the editor specified in the EDITOR environment variable
     if string == None:
         if editor == "emacs":
@@ -113,7 +117,21 @@ def entry(nickname, images, defs, string=None):
             
         stdout, stderr, rc = shell_util.run(prog)
         
-        
+
+    # did the user actually make edits?
+    hash_new = hashlib.md5(open(odir + ofile, 'r').read()).hexdigest()
+
+    if string == None and len(images) == 0 and (hash_new == hash_orig):
+        # user didn't do anything interesting
+        answer = raw_input("no input made -- add this to the journal? (y/N) ")
+        if not answer.lower() == "y":
+            try: os.remove(odir + ofile)
+            except:
+                sys.exit("ERROR: unable to remove file -- entry aborted")
+                
+            sys.exit("entry aborted")
+
+            
     # commit the entry to the working git repo
     os.chdir(odir)
     
