@@ -33,6 +33,10 @@ if __name__ == "__main__":
             "edit":
               "edit an existing entry\n" +
               "options: 'yyyy-mm-dd hh.mm.ss'\n",
+
+            "list":
+              "list the entry id's and .tex file path for the last entries\n" +
+              "options: [N]\n",
             
             "build":
               "build a PDF of the journal\n" +
@@ -155,6 +159,16 @@ if __name__ == "__main__":
         date_string = args.options[0]
         
         entry_util.edit(nickname, date_string, defs)
+
+    elif action == "list":
+        
+        # options: number to list (optional)
+        num = 10
+        if len(args.options) == 1:
+            num = int(args.options[0])
+        
+        entry_util.elist(nickname, num, defs)
+
         
     elif action == "build":
         build_util.build(nickname, defs)

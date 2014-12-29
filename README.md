@@ -98,7 +98,12 @@ our machines and have a consistent, searchable journal.
     and pops up an editor window with the entry for revision.  Since the
     new changes are committed to the git repo, the history of changes to
     the entry are preserved in the git history.
-    
+
+  - `pyjournal.py [-n nickname] list [N]`
+
+    list the id (date-time) and full path to the LaTeX file for the last
+    N entries.
+
   - `pyjournal.py [-n nickname] build`
 
     builds the journal PDF

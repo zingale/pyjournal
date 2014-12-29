@@ -125,7 +125,10 @@ def entry(nickname, images, defs, string=None):
         stdout, stderr, rc = shell_util.run("git add " + im)
         stdout, stderr, rc = shell_util.run("git commit -m 'new image' " + im)
 
+    # helpful edit suggestion
+    print "entry created.  Use 'pyjournal.py edit {}' to edit this entry.".format(entry_id)
 
+    
 def edit(nickname, date_string, defs):
 
     # find the file corresponding to the date string
@@ -168,6 +171,28 @@ def edit(nickname, date_string, defs):
     stdout, stderr, rc = shell_util.run("git commit -m 'edited entry' " + file)
     
     
+def elist(nickname, num, defs):
 
+    entry_dir = "{}/journal-{}/entries/".format(defs[nickname]["working_path"], nickname)
+
+    entries = {}
+    for d in os.listdir(entry_dir):
+        if os.path.isdir(entry_dir + d):
+
+            dir = os.path.normpath("{}/{}".format(entry_dir, d))
+                                   
+            for t in os.listdir(dir):
+                if t.endswith(".tex"):
+                    entries[t] = "{}/{}".format(dir, t)
+
+    e = entries.keys()
+    e.sort(reverse=True)
+
+    for n in range(min(num, len(e))):
+        print "{}: {}".format(e[n], entries[e[n]])
+        
+    
+
+    
         
     
