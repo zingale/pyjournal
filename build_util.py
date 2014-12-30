@@ -79,7 +79,7 @@ def build(nickname, defs, show=0):
                 f.write("\\HRule\\\\ \n")
                 idx = t.rfind(".tex")
                 tout = t[:idx].replace("_", " ")
-                f.write("{{\\bf {} }}\\\\[0.5em] \n".format(tout))
+                f.write("{{\\bfseries {{\sffamily {} }} }}\\\\[0.5em] \n".format(tout))
                 f.write("\\input{{entries/{}/{}}}\n\n".format(e, t))
                 f.write("\\vskip 2em\n")
                     
