@@ -34,6 +34,10 @@ if __name__ == "__main__":
               "edit an existing entry\n" +
               "options: 'yyyy-mm-dd hh.mm.ss'\n",
 
+            "help":
+              "display help about an action\n" +
+              "options: action\n",
+            
             "list":
               "list the entry id's and .tex file path for the last entries\n" +
               "options: [N]\n",
@@ -102,7 +106,7 @@ if __name__ == "__main__":
         if not ha in help.keys():
             sys.exit("ERROR: invalid action to requires help for")
         else:
-            print "pyjournal.py {} options: {}\n".format(ha, help[ha])
+            print "pyjournal.py {} options: {}".format(ha, help[ha])
             sys.exit()
 
     nickname = args.n
