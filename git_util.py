@@ -158,7 +158,7 @@ def init_todo(master_path, working_path, defs):
     
     try: f = open("{}/README".format(working_todo), "w")
     except:
-        sys.exit("ERROR: unable to open {}/README".format(working_journal))
+        sys.exit("ERROR: unable to open {}/README".format(working_todo))
 
     f.write("TODO collection managed by pytodo\n")
     f.close()

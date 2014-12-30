@@ -77,10 +77,14 @@ if __name__ == "__main__":
         
     elif action == "init":
         master_path = args["master-path"][0]
-        try: working_path = args["working-path"][0]
-        except:
+        if "working-path" in args.keys():
+            working_path = args["working-path"]  # when using "?" argparse doesn't make this a list
+        else:
             working_path = master_path
 
+        master_path = os.path.normpath(os.path.expanduser(master_path))
+        working_path = os.path.normpath(os.path.expanduser(working_path))
+        
         git_util.init_todo(master_path, working_path, defs)
         
     elif action == "connect":
