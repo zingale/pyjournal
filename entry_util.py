@@ -94,9 +94,10 @@ def entry(nickname, images, defs, string=None):
             if idx >= 0:
                 im0 = "{}:{}".format(entry_id, im[:idx])
 
+            fname = "entries/{}/{}".format(entry_dir, im_copy)
             # add the figure text
             for l in figure_str.split("\n"):
-                f.write("{}\n".format(l.replace("@figname@", "entries/{}/{}".format(entry_dir, im_copy)).replace("@figlabel@", im0).rstrip()))
+                f.write("{}\n".format(l.replace("@figname@", fname).replace("@figlabel@", im0).rstrip()))
                 
 
     # add the entry id as a LaTeX comment
