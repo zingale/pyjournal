@@ -4,10 +4,10 @@
 a simple commandline-driven scientific journal in LaTeX managed by git
 """
 
-import os
-import sys
 import argparse
 import ConfigParser
+import os
+import sys
 
 import build_util
 import entry_util
