@@ -1,10 +1,23 @@
 # pyjournal
 
-pyjournal is a simple set of commandline scripts to create a
-LaTeX-based scientific journal that is managed via `git` so that we
-can easily log day-to-day activities from the commandline on any of
-our machines and have a consistent, searchable journal.
+pyjournal is a commandline script written in python to create and
+manage a LaTeX-based scientific journal.  The journal is distributed
+(via `git`) so that we can access it from any machine we work on.
+It is commandline driven to make the barrier-to-entry for creating
+a short entry minimal.  The resulting PDF journal is searchable.
 
+* Installing:
+
+  Simply clone the git repo and put the directory in your path.
+  Alternately, if you have a `~/bin/` directory, do:
+
+  ```
+  ln -s ~/{pyjournal-path}/pyjournal.py ~/bin/
+  ```
+
+  For the simplest (and laziest) access, create an alias `pj` for
+  `pyjournal.py`
+  
 
 * Starting:
 
@@ -64,6 +77,7 @@ our machines and have a consistent, searchable journal.
     working_path = local-path/
     ```  
 
+
 * Directory structure:
 
   ```
@@ -98,6 +112,9 @@ our machines and have a consistent, searchable journal.
     and pops up an editor window with the entry for revision.  Since the
     new changes are committed to the git repo, the history of changes to
     the entry are preserved in the git history.
+
+    The editor to use is taken from your `EDITOR` environment variable,
+	of, if that is not set, defaults to `emacs` (run in a terminal).
 
   - `pyjournal.py [-n nickname] list [N]`
 
@@ -145,3 +162,24 @@ our machines and have a consistent, searchable journal.
   master_repo = XXX.git  ; this is what we push to/pull from
   working_path = YYY     ; local directory we interact with on our machine
   ```
+
+
+
+# pytodo
+
+pytodo shares the basic idea of pyjournal, but is meant for managing
+a collection of TODO lists.  Again, `git` is used to manage them
+across machines.  The basic commands and flow follow that of `pyjournal`.
+See
+
+```
+pytodo.py -h
+```
+
+for a list of commands, and do
+
+```
+pytodo.py command -h
+```
+
+to see the options for that command.
