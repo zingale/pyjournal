@@ -15,6 +15,9 @@ figure_str = r"""
 
 """
 
+#=============================================================================
+# journal-specific routines
+#=============================================================================
 
 def get_entry_string():
     now = datetime.datetime.now()
@@ -112,7 +115,7 @@ def entry(nickname, images, defs, string=None):
     # launch the editor specified in the EDITOR environment variable
     if string == None:
         if editor == "emacs":
-            prog = "{} {}/{}".format("emacs -nw", odir, ofile)
+            prog = "emacs -nw {}/{}".format(odir, ofile)
         else:
             prog = "{} {}/{}".format(editor, odir, ofile)
             
@@ -183,7 +186,7 @@ def edit(nickname, date_string, defs):
     f.close()
 
     if editor == "emacs":
-        prog = "{} {}".format("emacs -nw", file)
+        prog = "emacs -nw {}".format(file)
     else:
         prog = "{} {}".format(editor, file)
         
@@ -214,7 +217,11 @@ def elist(nickname, num, defs):
         entry_id = e[n][:idx]
         print "{}: {}".format(entry_id, entries[e[n]])
         
-    
+
+#=============================================================================
+# todo-specific routines
+#=============================================================================
+        
 def add_list(list_name, defs):
 
     todo_dir = "{}/todo_list/".format(defs["working_path"])
@@ -234,7 +241,7 @@ def add_list(list_name, defs):
     except:
         sys.exit("ERROR: unable to create list {}".format(list_name))
 
-    f.write("% list: {} managed by pytodo".format(list_name))
+    f.write("# list: {} managed by pytodo".format(list_name))
     f.close()
 
 
@@ -263,3 +270,34 @@ def tlist(defs):
         print l
 
     
+def show(list_name, defs):
+
+    todo_dir = "{}/todo_list/".format(defs["working_path"])
+
+    try: os.chdir(todo_dir)
+    except:
+        sys.exit("ERROR: unable to cd into working directory {}".format(todo_dir))
+
+
+    # does it already exist?
+    if not os.path.isfile("{}.list".format(list_name)):
+        sys.exit("ERROR: list does not exist")
+
+        
+    # open for editing
+    try: editor = os.environ["EDITOR"]
+    except:
+        editor = "emacs"
+
+    if editor == "emacs":        
+        prog = "emacs -nw {}.list".format(list_name)
+    else:
+        prog = "{} {}.list".format(editor, listname)
+            
+    stdout, stderr, rc = shell_util.run(prog)
+
+
+    # git-store the updates
+    stdout, stderr, rc = shell_util.run("git commit -m 'edited list {}.list' ".format(list_name))
+
+

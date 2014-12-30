@@ -72,7 +72,8 @@ if __name__ == "__main__":
     action = args["command"]
 
     if action == "show":
-        pass
+        list_name = args["list-name"][0]
+        entry_util.show(list_name, defs)
         
     elif action == "init":
         master_path = args["master-path"][0]
