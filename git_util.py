@@ -6,6 +6,10 @@ import entry_util
 import master_util
 import shell_util
 
+#=============================================================================
+# journal-specific routines
+#=============================================================================
+
 def init(nickname, master_path, working_path, defs):
 
     # make sure that a journal with this nickname doesn't already exist
@@ -75,8 +79,49 @@ def init(nickname, master_path, working_path, defs):
     stdout, stderr, rc = shell_util.run("git add journal.tex")
     stdout, stderr, rc = shell_util.run("git commit -m 'initial journal.tex file' journal.tex")
     stdout, stderr, rc = shell_util.run("git push")
+    
+    
+def connect(master_repo, working_path, defs):
+
+    # get the nickname from the master repo name
+    re_name = r"journal-(.*).git"
+    a = re.search(re_name, master_repo)
+
+    if not a == None: 
+        nickname = a.group(1)
+    else:
+        sys.exit("ERROR: the remote-git-repo should be of the form: ssh://machine/dir/journal-nickname.git")
+    
+    # make sure that a journal with this nickname doesn't already exist
+    if nickname in defs.keys():
+        sys.exit("ERROR: nickname already exists")
+                     
+    # git clone the bare repo at master_repo into the working path
+    try: os.chdir(working_path)
+    except:
+        sys.exit("ERROR: unable to switch to directory {}".format(working_path))
+        
+    stdout, stderr, rc = shell_util.run("git clone " + master_repo)
+    if not rc == 0:
+        print stderr
+        sys.exit("ERROR: something went wrong with the git clone")
+    
+    # create (or add to) the .pyjournalrc file
+    try: f = open(defs["param_file"], "a+")             
+    except:
+        sys.exit("ERROR: unable to open {} for appending".format(defs["param_file"]))
+
+    f.write("[{}]\n".format(nickname))
+    f.write("master_repo = {}\n".format(master_repo))
+    f.write("working_path = {}\n".format(working_path))
+    f.write("\n")
+    f.close()
 
 
+#=============================================================================
+# todo-specific routines
+#=============================================================================
+    
 def init_todo(master_path, working_path, defs):
 
     # create the bare git repo
@@ -126,22 +171,14 @@ def init_todo(master_path, working_path, defs):
     stdout, stderr, rc = shell_util.run("git commit -m 'initial README file' README")
     stdout, stderr, rc = shell_util.run("git push")
     
-    
-def connect(master_repo, working_path, defs):
 
-    # get the nickname from the master repo name
-    re_name = r"journal-(.*).git"
-    a = re.search(re_name, master_repo)
+def connect_todo(master_repo, working_path, defs):
 
-    if not a == None: 
-        nickname = a.group(1)
-    else:
-        sys.exit("ERROR: the remote-git-repo should be of the form: ssh://machine/dir/journal-nickname.git")
+    # if a .pytodorc file already exists, we abort -- only one
+    # collection per machine
+    if os.path.isfile(defs["param_file"]):
+        sys.exit("ERROR: a pytodo collection already exists")
     
-    # make sure that a journal with this nickname doesn't already exist
-    if nickname in defs.keys():
-        sys.exit("ERROR: nickname already exists")
-                     
     # git clone the bare repo at master_repo into the working path
     try: os.chdir(working_path)
     except:
@@ -152,18 +189,22 @@ def connect(master_repo, working_path, defs):
         print stderr
         sys.exit("ERROR: something went wrong with the git clone")
     
-    # create (or add to) the .pyjournalrc file
-    try: f = open(defs["param_file"], "a+")             
+    # create the .pytodorc file
+    try: f = open(defs["param_file"], "w")             
     except:
-        sys.exit("ERROR: unable to open {} for appending".format(defs["param_file"]))
+        sys.exit("ERROR: unable to open {}".format(defs["param_file"]))
 
-    f.write("[{}]\n".format(nickname))
+    f.write("[main]\n")
     f.write("master_repo = {}\n".format(master_repo))
     f.write("working_path = {}\n".format(working_path))
     f.write("\n")
     f.close()
 
 
+#=============================================================================
+# general routines
+#=============================================================================
+    
 def pull(nickname, defs):
 
     # switch to the working directory and pull from the master
