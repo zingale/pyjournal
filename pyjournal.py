@@ -110,7 +110,8 @@ if __name__ == "__main__":
         journals = defs.keys()
         journals.remove("param_file")
         journals.remove("image_dir")
-        nickname = journals[0]
+        if len(journals) > 0:
+            nickname = journals[0]
                 
     if action == "init":
 
