@@ -1,4 +1,7 @@
--- if an entry is empty (aside from the comment that is automatically added)
-   then don't save it to the journal
+-- deal with the options for the individal actions and their options by
+   doing nested parsers like shown in http://pymotw.com/2/argparse/
 
--- add an 'append' action that opens up the previous entry for editing
+-- detect if the necessary latex packages are installed.  Perhaps by using
+   kpsewhich
+   
+
