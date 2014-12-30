@@ -215,7 +215,51 @@ def elist(nickname, num, defs):
         print "{}: {}".format(entry_id, entries[e[n]])
         
     
+def add_list(list_name, defs):
 
-    
+    todo_dir = "{}/todo_list/".format(defs["working_path"])
+
+    try: os.chdir(todo_dir)
+    except:
+        sys.exit("ERROR: unable to cd into working directory {}".format(todo_dir))
+
+
+    # does it already exist?
+    if os.path.isfile("{}.list".format(list_name)):
+        sys.exit("ERROR: list already exists")
+                      
         
+    # create the list file
+    try: f = open("{}.list".format(list_name), "w")
+    except:
+        sys.exit("ERROR: unable to create list {}".format(list_name))
+
+    f.write("% list: {} managed by pytodo".format(list_name))
+    f.close()
+
+
+    # commit the list
+    stdout, stderr, rc = shell_util.run("git add {}.list".format(list_name))
+    stdout, stderr, rc = shell_util.run("git commit -m 'new list' {}.list".format(list_name))
+        
+    
+def tlist(defs):
+
+    todo_dir = "{}/todo_list/".format(defs["working_path"])
+
+    try: os.chdir(todo_dir)
+    except:
+        sys.exit("ERROR: unable to cd into working directory {}".format(todo_dir))
+
+
+    # find the lists
+    known_lists = []
+    for f in os.listdir("."):
+        if os.path.isfile(f) and f.endswith(".list"):
+            idx = f.rfind(".list")
+            known_lists.append(f[:idx])
+
+    for l in known_lists:
+        print l
+
     

@@ -5,6 +5,7 @@ import ConfigParser
 import os
 import sys
 
+import entry_util
 import git_util
 
 if __name__ == "__main__":
@@ -64,11 +65,7 @@ if __name__ == "__main__":
         # main -- there is only one working directory/master repo for
         # all lists
         defs["working_path"] = cp.get("main", "working_path")
-        defs["master_repo"] = cp.get(sec, "master_repo")
-
-        # lists
-        for l in cp.options("lists"):
-            defs[l] = cp.get("lists", l)
+        defs["master_repo"] = cp.get("main", "master_repo")
         
 
     # take the appropriate action
@@ -89,10 +86,11 @@ if __name__ == "__main__":
         pass
         
     elif action == "add":
-        pass
+        list_name = args["list-name"][0]
+        entry_util.add_list(list_name, defs)
         
     elif action == "list":
-        pass
+        entry_util.tlist(defs)
         
     elif action == "push":
         pass
