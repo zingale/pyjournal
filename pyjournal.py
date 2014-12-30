@@ -183,10 +183,10 @@ if __name__ == "__main__":
         build_util.build(nickname, defs, show=1)        
         
     elif action == "pull":
-        git_util.pull(nickname, defs)
+        git_util.pull(defs, nickname=nickname)
         
     elif action == "push":
-        git_util.push(nickname, defs)
+        git_util.push(defs, nickname=nickname)
 
     elif action == "status":
         if nickname in defs.keys():

@@ -205,11 +205,14 @@ def connect_todo(master_repo, working_path, defs):
 # general routines
 #=============================================================================
     
-def pull(nickname, defs):
-
+def pull(defs, nickname=None):
+    
     # switch to the working directory and pull from the master
-    wd = "{}/journal-{}".format(defs[nickname]["working_path"], nickname)
-
+    if not nickname == None:
+        wd = "{}/journal-{}".format(defs[nickname]["working_path"], nickname)
+    else:
+        wd = "{}/todo_list".format(defs["working_path"])
+        
     try: os.chdir(wd)
     except:
         sys.exit("ERROR: unable to switch to working directory: {}".format(wd))
@@ -222,10 +225,13 @@ def pull(nickname, defs):
     print stdout
     
 
-def push(nickname, defs):
+def push(defs, nickname=None):
 
     # switch to the working directory and push to the master
-    wd = "{}/journal-{}".format(defs[nickname]["working_path"], nickname)    
+    if not nickname == None:
+        wd = "{}/journal-{}".format(defs[nickname]["working_path"], nickname)
+    else:
+        wd = "{}/todo_list".format(defs["working_path"])
 
     try: os.chdir(wd)
     except:

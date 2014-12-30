@@ -96,10 +96,10 @@ if __name__ == "__main__":
         entry_util.tlist(defs)
         
     elif action == "push":
-        pass
+        git_util.push(defs)
         
     elif action == "pull":
-        pass
+        git_util.pull(defs)
         
     else:
         sys.exit("you should not have gotten here -- invalid action")
