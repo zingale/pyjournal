@@ -298,6 +298,11 @@ def show(list_name, defs):
 
 
     # git-store the updates
-    stdout, stderr, rc = shell_util.run("git commit -m 'edited list {}.list' ".format(list_name))
+    stdout, stderr, rc = shell_util.run("git commit -m 'edited list {}.list' {}.list".format(list_name, list_name))
 
+    if not rc == 0:
+        print stdout, stderr
+        sys.exit("ERROR: there were git errors commiting the list")
+        
+    
 

@@ -89,8 +89,11 @@ if __name__ == "__main__":
         
     elif action == "connect":
         master_repo = args["remote-git-repo"][0]
-        working_path = args["working-path"][0]        
-        git_util.connect_todo(master_repo, working_path)        
+        working_path = args["working-path"][0]
+
+        working_path = os.path.normpath(os.path.expanduser(working_path))
+        
+        git_util.connect_todo(master_repo, working_path, defs)        
         
     elif action == "add":
         list_name = args["list-name"][0]
