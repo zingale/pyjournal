@@ -1,7 +1,11 @@
-import os
+#!/usr/bin/env python
+
 import argparse
+import ConfigParser
+import os
+import sys
 
-
+import git_util
 
 if __name__ == "__main__":
 
@@ -42,9 +46,66 @@ if __name__ == "__main__":
     # the push command
     pull_parser = subparsers.add_parser("pull", help="pull remote changes to the local todo collection")
     
-    args = parser.parse_args()
+    args = vars(parser.parse_args())
 
-    print vars(args)
+
+    # parse the .pytodorc file -- store the results in a dictionary
+    defs = {}
+    defs["param_file"] = os.path.expanduser("~") + "/.pytodorc"
+    
+    if os.path.isfile(defs["param_file"]):
+        cp = ConfigParser.ConfigParser()
+        cp.optionxform = str
+        cp.read(defs["param_file"])
+
+        if not "main" in cp.sections():
+            sys.exit("ERROR: no lists initialized")
+
+        # main -- there is only one working directory/master repo for
+        # all lists
+        defs["working_path"] = cp.get("main", "working_path")
+        defs["master_repo"] = cp.get(sec, "master_repo")
+
+        # lists
+        for l in cp.options("lists"):
+            defs[l] = cp.get("lists", l)
+        
+
+    # take the appropriate action
+    action = args["command"]
+
+    if action == "show":
+        pass
+        
+    elif action == "init":
+        master_path = args["master-path"][0]
+        try: working_path = args["working-path"][0]
+        except:
+            working_path = master_path
+
+        git_util.init_todo(master_path, working_path, defs)
+        
+    elif action == "connect":
+        pass
+        
+    elif action == "add":
+        pass
+        
+    elif action == "list":
+        pass
+        
+    elif action == "push":
+        pass
+        
+    elif action == "pull":
+        pass
+        
+    else:
+        sys.exit("you should not have gotten here -- invalid action")
+
+        
+
+                                                    
     
     
     

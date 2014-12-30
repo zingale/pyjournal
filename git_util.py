@@ -75,7 +75,57 @@ def init(nickname, master_path, working_path, defs):
     stdout, stderr, rc = shell_util.run("git add journal.tex")
     stdout, stderr, rc = shell_util.run("git commit -m 'initial journal.tex file' journal.tex")
     stdout, stderr, rc = shell_util.run("git push")
-        
+
+
+def init_todo(master_path, working_path, defs):
+
+    # create the bare git repo
+    git_master = "{}/todo_list.git".format(os.path.normpath(master_path))
+    try: os.mkdir(git_master)
+    except:
+        sys.exit("ERROR: unable to create a directory in {}".format(master_path))
+
+    os.chdir(git_master)
+    stdout, stderr, rc = shell_util.run("git init --bare")
+    
+
+    # create the local working copy
+    try: os.chdir(os.path.normpath(working_path))
+    except:
+        sys.exit("ERROR: unable to change to {}".format(working_path))
+
+    stdout, stderr, rc = shell_util.run("git clone " + git_master)
+    
+    
+    # create (or add to) the .pytodorc file
+    try: f = open(defs["param_file"], "a+")             
+    except:
+        sys.exit("ERROR: unable to open {} for appending".format(defs["param_file"]))
+
+    f.write("[main]\n")
+    f.write("master_repo = {}\n".format(git_master))
+    f.write("working_path = {}\n".format(working_path))
+    f.write("\n")
+    f.close()
+    
+    # create a README
+    working_todo = "{}/todo_list".format(os.path.normpath(working_path))
+    
+    try: f = open("{}/README".format(working_todo), "w")
+    except:
+        sys.exit("ERROR: unable to open {}/README".format(working_journal))
+
+    f.write("TODO collection managed by pytodo\n")
+    f.close()
+
+
+    # add README to the repo and do a git push to make it synced
+    os.chdir(working_todo)
+    
+    stdout, stderr, rc = shell_util.run("git add README")
+    stdout, stderr, rc = shell_util.run("git commit -m 'initial README file' README")
+    stdout, stderr, rc = shell_util.run("git push")
+    
     
 def connect(master_repo, working_path, defs):
 
