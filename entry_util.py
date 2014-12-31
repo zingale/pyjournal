@@ -15,6 +15,22 @@ figure_str = r"""
 
 """
 
+class _TermColors:
+    WARNING = '\033[93m'
+    SUCCESS = '\033[92m'
+    FAIL = '\033[91m'
+    BOLD = '\033[1m'
+    ENDC = '\033[0m'
+                        
+
+def success(str):
+    """
+    Output a string to the terminal colored green to indicate 
+    success
+    """
+    print(_TermColors.SUCCESS + str + _TermColors.ENDC)
+        
+    
 #=============================================================================
 # journal-specific routines
 #=============================================================================
@@ -266,9 +282,9 @@ def tlist(defs):
             idx = f.rfind(".list")
             known_lists.append(f[:idx])
 
-    for l in known_lists:
-        print l
-
+    for l in sorted(known_lists):
+        success(l)
+        
     
 def show(list_name, defs):
 
