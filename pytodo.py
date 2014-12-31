@@ -82,7 +82,7 @@ if __name__ == "__main__":
         list_name = args["list-name"][0]
         entry_util.show(list_name, defs)
 
-    if action == "cat":
+    elif action == "cat":
         list_name = args["list-name"][0]
         entry_util.cat(list_name, defs)
         
