@@ -18,7 +18,8 @@ if __name__ == "__main__":
             
     parser = argparse.ArgumentParser()
 
-    subparsers = parser.add_subparsers(help="commands", dest="command")
+    subparsers = parser.add_subparsers(title="subcommands", description="valid subcommands",
+                                       help="subcommands (use -h to see options for each)", dest="command")
 
     # the init command
     init_ps = subparsers.add_parser("init", help="initialize a journal")
