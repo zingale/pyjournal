@@ -47,7 +47,7 @@ if __name__ == "__main__":
                                      help="add a new entry, with optional images")
     entry_ps.add_argument("images", help="images to include as figures in the entry",
                           nargs="*", default=None, type=str)
-    entry_ps.add_argument("-n", help="nickname of the journal",
+    entry_ps.add_argument("-n", metavar="nickname", help="nickname of the journal",
                           type=str, default=None)
 
     # the edit command
@@ -56,13 +56,13 @@ if __name__ == "__main__":
     edit_ps.add_argument("date-time string",
                          help="entry id to edit, in the form: yyyy-mm-dd hh.mm.ss",
                          nargs=1, default=None, type=str)
-    edit_ps.add_argument("-n", help="nickname of the journal",
+    edit_ps.add_argument("-n", metavar="nickname", help="nickname of the journal",
                          type=str, default=None)
 
     # the list command
     list_ps = subparsers.add_parser("list",
                                     help="list the recent entry id's and .tex file path for the last entries")
-    list_ps.add_argument("-n", help="nickname of the journal",
+    list_ps.add_argument("-n", metavar="nickname", help="nickname of the journal",
                          type=str, default=None)
     list_ps.add_argument("-N", help="number of entries to list",
                          type=int, default=10)    
@@ -70,31 +70,31 @@ if __name__ == "__main__":
     # the build command
     build_ps = subparsers.add_parser("build",
                                      help="build a PDF of the journal")
-    build_ps.add_argument("-n", help="nickname of the journal",
+    build_ps.add_argument("-n", metavar="nickname", help="nickname of the journal",
                          type=str, default=None)
 
     # the pull command
     pull_ps = subparsers.add_parser("pull",
                                     help="pull from the remote journal" )
-    pull_ps.add_argument("-n", help="nickname of the journal",
+    pull_ps.add_argument("-n", metavar="nickname", help="nickname of the journal",
                          type=str, default=None)
 
     # the push command
     push_ps = subparsers.add_parser("push",
                                     help="push local changes to the remote journal")
-    push_ps.add_argument("-n", help="nickname of the journal",
+    push_ps.add_argument("-n", metavar="nickname", help="nickname of the journal",
                          type=str, default=None)
 
     # the status command
     stat_ps = subparsers.add_parser("status",
                                     help="list the current journal information")
-    stat_ps.add_argument("-n", help="nickname of the journal",
+    stat_ps.add_argument("-n", metavar="nickname", help="nickname of the journal",
                          type=str, default=None)
 
     # the show command
     show_ps = subparsers.add_parser("show",
                                     help="build the PDF and launch a PDF viewer")
-    show_ps.add_argument("-n", help="nickname of the journal",
+    show_ps.add_argument("-n", metavar="nickname", help="nickname of the journal",
                          type=str, default=None)    
     
     args = vars(parser.parse_args())

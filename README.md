@@ -95,17 +95,13 @@ a short entry minimal.  The resulting PDF journal is searchable.
 
 * Day-to-day use:
 
-  - `pyjournal.py [-n nickname] entry [XXX YYY ZZZ ...]` or
-    `pyjournal [-n nickname]`
+  - `pyjournal.py entry [-n nickname] [XXX [YYY ...]]`
   
     adds an entry to the journal (optionally named "nickname"). `XXX`,
     `YYY`, and `ZZZ` are optional names of images that will
     automatically be added as figures to the new entry
 
-    Note: you can run `pyjournal.py` without any action, and it will
-    default to `entry`, but you don't have the option for images.
-
-  - `pyjournal.py [-n nickname] edit 'yyyy-mm-dd hh.mm.ss'`
+  - `pyjournal.py edit [-n nickname] 'yyyy-mm-dd hh.mm.ss'`
 
     edit the entry corresponding to the date/time string in the journal.
     This adds a comment to the LaTeX indicating the time of the edit
@@ -116,26 +112,26 @@ a short entry minimal.  The resulting PDF journal is searchable.
     The editor to use is taken from your `EDITOR` environment variable,
 	of, if that is not set, defaults to `emacs` (run in a terminal).
 
-  - `pyjournal.py [-n nickname] list [N]`
+  - `pyjournal.py list [-n nickname] [-N N]`
 
     list the id (date-time) and full path to the LaTeX file for the last
     N entries.
 
-  - `pyjournal.py [-n nickname] build`
+  - `pyjournal.py build [-n nickname]`
 
     builds the journal PDF
 
-  - `pyjournal.py [-n nickname] show`
+  - `pyjournal.py show [-n nickname]`
 
     builds the journal PDF and launches the `evince` viewer in the
     background to display it.
 
-  - `pyjournal.py [-n nickname] pull`
+  - `pyjournal.py pull [-n nickname] `
 
      gets any changes from the master version of the journal (remote
      git bare repository)
 
-  - `pyjournal.py [-n nickname] push`
+  - `pyjournal.py push [-n nickname] `
 
     pushes any changes in the local journal to the remote (git bare
     repo) version
