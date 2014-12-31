@@ -328,3 +328,23 @@ def show(list_name, defs):
         
     
 
+def cat(list_name, defs):
+
+    todo_dir = "{}/todo_list/".format(defs["working_path"])
+
+    try: os.chdir(todo_dir)
+    except:
+        sys.exit("ERROR: unable to cd into working directory {}".format(todo_dir))
+
+
+    try: f = open("{}.list".format(list_name), "r")
+    except:
+        sys.exit("ERROR: list {} does not exist".format(list_name))
+        
+    print f.read()
+
+    f.close()
+
+    
+    
+

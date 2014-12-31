@@ -15,7 +15,12 @@ if __name__ == "__main__":
     subparsers = parser.add_subparsers(help="commands", dest="command")
 
     # the show command
-    show_parser = subparsers.add_parser("show", help="show a list")
+    show_parser = subparsers.add_parser("show", help="show a list in an editor")
+    show_parser.add_argument("list-name", help="the name of the todo list to show",
+                             nargs=1, default=None, type=str)
+
+    # the cat command
+    show_parser = subparsers.add_parser("cat", help="display a list in the terminal (no editing)")
     show_parser.add_argument("list-name", help="the name of the todo list to show",
                              nargs=1, default=None, type=str)
     
@@ -76,6 +81,10 @@ if __name__ == "__main__":
     if action == "show":
         list_name = args["list-name"][0]
         entry_util.show(list_name, defs)
+
+    if action == "cat":
+        list_name = args["list-name"][0]
+        entry_util.cat(list_name, defs)
         
     elif action == "init":
         master_path = args["master-path"][0]
