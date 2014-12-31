@@ -1,8 +1,3 @@
 -- detect if the necessary latex packages are installed.  Perhaps by using
    kpsewhich
 
--- now that we are doing subparsers, can we have a default command if no
-   subparsers are invoked?  This seems to offer the solution:
-
-   http://stackoverflow.com/questions/8521612/argparse-optional-subparser
-
