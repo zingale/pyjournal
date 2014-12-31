@@ -157,7 +157,7 @@ def edit(nickname, date_string, defs):
     entry_dir = "{}/journal-{}/entries/".format(defs[nickname]["working_path"], nickname)
 
     os.chdir(entry_dir)
-    
+
     try: d, t = date_string.split(" ")
     except:
         sys.exit("invalid date string")

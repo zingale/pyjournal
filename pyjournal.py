@@ -14,69 +14,89 @@ import entry_util
 import git_util
 
 
-
-
 if __name__ == "__main__":
-
-    help = {"init":
-              "initialize a journal\n" + 
-              "options: nickname path/ [working-path]\n",
-
-            "connect":
-              "connect to a remote journal for local editing\n" +
-              "options: remote-git-repo local-path/\n",
-
-            "entry":
-              "add a new entry, with optional images\n" +
-              "options: [image1 [image2 ... ]]\n",
-
-            "edit":
-              "edit an existing entry\n" +
-              "options: 'yyyy-mm-dd hh.mm.ss'\n",
-
-            "help":
-              "display help about an action\n" +
-              "options: action\n",
             
-            "list":
-              "list the entry id's and .tex file path for the last entries\n" +
-              "options: [N]\n",
-            
-            "build":
-              "build a PDF of the journal\n" +
-              "no options\n",
-
-            "pull":
-              "pull from the remote journal\n" +
-              "no options\n",
-
-            "push":
-              "push local changes to the remote journal\n" +
-              "no options\n",
-
-            "status":
-              "list the current journal information\n" +
-              "no options\n",
-
-            "show":
-              "build the PDF and launch a PDF viewer\n" +
-              "no options\n"}
-    
     parser = argparse.ArgumentParser()
-    parser.add_argument("-n", help="nickname of the journal",
-                        type=str, default=None)
 
-    parser.add_argument("action", metavar="action",
-                        type=str, nargs="?", default="entry", 
-                        choices=help.keys(),
-                        help="an action: {}".format(help.keys()))
+    subparsers = parser.add_subparsers(help="commands", dest="command")
 
-    parser.add_argument("options", metavar="options", type=str,
-                        default=None, nargs="*",
-                        help="options for the actions.  " + \
-                             "'pyjournal.py help action' lists options")
-                        
-    args = parser.parse_args()
+    # the init command
+    init_ps = subparsers.add_parser("init", help="initialize a journal")
+    init_ps.add_argument("nickname", help="name of the journal",
+                         nargs=1, default=None, type=str)
+    init_ps.add_argument("master-path",
+                         help="path where we will store the master (bare) git repo",
+                             nargs=1, default=None, type=str)
+    init_ps.add_argument("working-path",
+                         help="path where we will store the working directory (clone of bare repo)",
+                         nargs="?", default=None, type=str)
+
+    # the connect command
+    connect_ps = subparsers.add_parser("connect",
+                                       help="create a local working copy of a remote journal")
+    connect_ps.add_argument("remote-git-repo",
+                            help="the full path to the remote '.git' bare repo",
+                            nargs=1, default=None, type=str)
+    connect_ps.add_argument("working-path",
+                            help="the (local) path where we will store the working directory",
+                            nargs=1, default=None, type=str)
+
+    # the entry command
+    entry_ps = subparsers.add_parser("entry",
+                                     help="add a new entry, with optional images")
+    entry_ps.add_argument("images", help="images to include as figures in the entry",
+                          nargs="*", default=None, type=str)
+    entry_ps.add_argument("-n", help="nickname of the journal",
+                          type=str, default=None)
+
+    # the edit command
+    edit_ps = subparsers.add_parser("edit",
+                                    help="edit an existing entry")
+    edit_ps.add_argument("date-time string",
+                         help="entry id to edit, in the form: yyyy-mm-dd hh.mm.ss",
+                         nargs=1, default=None, type=str)
+    edit_ps.add_argument("-n", help="nickname of the journal",
+                         type=str, default=None)
+
+    # the list command
+    list_ps = subparsers.add_parser("list",
+                                    help="list the recent entry id's and .tex file path for the last entries")
+    list_ps.add_argument("-n", help="nickname of the journal",
+                         type=str, default=None)
+    list_ps.add_argument("-N", help="number of entries to list",
+                         type=int, default=10)    
+
+    # the build command
+    build_ps = subparsers.add_parser("build",
+                                     help="build a PDF of the journal")
+    build_ps.add_argument("-n", help="nickname of the journal",
+                         type=str, default=None)
+
+    # the pull command
+    pull_ps = subparsers.add_parser("pull",
+                                    help="pull from the remote journal" )
+    pull_ps.add_argument("-n", help="nickname of the journal",
+                         type=str, default=None)
+
+    # the push command
+    push_ps = subparsers.add_parser("push",
+                                    help="push local changes to the remote journal")
+    push_ps.add_argument("-n", help="nickname of the journal",
+                         type=str, default=None)
+
+    # the status command
+    stat_ps = subparsers.add_parser("status",
+                                    help="list the current journal information")
+    stat_ps.add_argument("-n", help="nickname of the journal",
+                         type=str, default=None)
+
+    # the show command
+    show_ps = subparsers.add_parser("show",
+                                    help="build the PDF and launch a PDF viewer")
+    show_ps.add_argument("-n", help="nickname of the journal",
+                         type=str, default=None)    
+    
+    args = vars(parser.parse_args())
 
 
     # parse the .pyjournalrc file -- store the results in a dictionary
@@ -96,99 +116,118 @@ if __name__ == "__main__":
             defs[sec]["master_repo"] = cp.get(sec, "master_repo")
             
             
-    action = args.action
+    action = args["command"]
 
-    if action == "help":
-        if not len(args.options) == 1:
-            sys.exit("ERROR: help requires an argument (the action)")
-                     
-        ha = args.options[0]
-        if not ha in help.keys():
-            sys.exit("ERROR: invalid action to requires help for")
-        else:
-            print "pyjournal.py {} options: {}".format(ha, help[ha])
-            sys.exit()
-
-    nickname = args.n
-    if nickname == None and not (action == "init" or action == "connect"):
+    if not (action == "init" or action == "connect"):
         journals = defs.keys()
         journals.remove("param_file")
         journals.remove("image_dir")
         if len(journals) > 0:
-            nickname = journals[0]
+            default_nickname = journals[0]
                 
     if action == "init":
 
-        # options: nickname path/ [working-path] 
-        if not (len(args.options) >= 2 and len(args.options) <= 3):
-            print "ERROR: invalid number of options for 'init'"
-            sys.exit("{}".format(help["init"]))
+        nickname = args["nickname"][0]
+        master_path = args["master-path"][0]
 
-        nickname = args.options[0]
-        master_path = args.options[1]
-        if len(args.options) == 3:
-            working_path = args.options[2]
-        else:
+
+        working_path = args["working-path"]
+        if working_path == None:
             working_path = master_path
-            
+        
+        master_path = os.path.normpath(os.path.expanduser(master_path))
+        working_path = os.path.normpath(os.path.expanduser(working_path))
+        
         git_util.init(nickname, master_path, working_path, defs)
 
     elif action == "connect":
 
-        # options: git-path/ local-path/
-        if not len(args.options) == 2:
-            print "ERROR: invalid number of options for 'connect'"
-            sys.exit("{}".format(help["connect"]))
+        master_repo = args["remote-git-repo"][0]
+        working_path = args["working-path"][0]
 
-        master_repo = args.options[0]
-        working_path = args.options[1]
+        working_path = os.path.normpath(os.path.expanduser(working_path))
         
         git_util.connect(master_repo, working_path, defs)
         
     elif action == "entry":
-        
-        # options: [image1 image2 image3 ...]
-        if len(args.options) >= 1:
-            images = args.options
+
+        images = args["images"]
+
+        if not args["n"] == None:
+            nickname = args["n"]
         else:
-            images = []
+            nickname = default_nickname
             
         entry_util.entry(nickname, images, defs)
 
     elif action == "edit":
         
         # options: date-string
-        if not len(args.options) == 1:
-            print "ERROR: edit requires a single argument"
-            sys.exit("{}".format(help["edit"]))
+        date_string = args["date-time string"][0]
 
-        date_string = args.options[0]
+        if not args["n"] == None:
+            nickname = args["n"]
+        else:
+            nickname = default_nickname
         
         entry_util.edit(nickname, date_string, defs)
 
     elif action == "list":
         
         # options: number to list (optional)
-        num = 10
-        if len(args.options) == 1:
-            num = int(args.options[0])
-        
+        num = args["N"]
+
+        if not args["n"] == None:
+            nickname = args["n"]
+        else:
+            nickname = default_nickname
+            
         entry_util.elist(nickname, num, defs)
 
         
     elif action == "build":
+
+        if not args["n"] == None:
+            nickname = args["n"]
+        else:
+            nickname = default_nickname
+
         build_util.build(nickname, defs)
 
     elif action == "show":
+
+        if not args["n"] == None:
+            nickname = args["n"]
+        else:
+            nickname = default_nickname
+        
         build_util.build(nickname, defs, show=1)        
         
     elif action == "pull":
+
+        if not args["n"] == None:
+            nickname = args["n"]
+        else:
+            nickname = default_nickname
+        
         git_util.pull(defs, nickname=nickname)
         
     elif action == "push":
+
+        if not args["n"] == None:
+            nickname = args["n"]
+        else:
+            nickname = default_nickname
+        
         git_util.push(defs, nickname=nickname)
 
     elif action == "status":
+
+        if not args["n"] == None:
+            nickname = args["n"]
+        else:
+            nickname = default_nickname
+
         if nickname in defs.keys():
             print "pyjournal"
             print "  current journal: {}".format(nickname)

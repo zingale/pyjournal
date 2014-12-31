@@ -12,7 +12,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
 
-    subparsers = parser.add_subparsers(help='commands', dest="command")
+    subparsers = parser.add_subparsers(help="commands", dest="command")
 
     # the show command
     show_parser = subparsers.add_parser("show", help="show a list")
@@ -21,9 +21,11 @@ if __name__ == "__main__":
     
     # the init command
     init_parser = subparsers.add_parser("init", help="initialize a todo collection")
-    init_parser.add_argument("master-path", help="path where we will store the master (bare) git repo",
+    init_parser.add_argument("master-path",
+                             help="path where we will store the master (bare) git repo",
                              nargs=1, default=None, type=str)
-    init_parser.add_argument("working-path", help="path where we will store working directory (clone of bare repo)", 
+    init_parser.add_argument("working-path",
+                             help="path where we will store the working directory (clone of bare repo)", 
                              nargs="?", default=None, type=str)
 
     # the connect command
@@ -77,6 +79,7 @@ if __name__ == "__main__":
         
     elif action == "init":
         master_path = args["master-path"][0]
+
         if "working-path" in args.keys():
             working_path = args["working-path"]  # when using "?" argparse doesn't make this a list
         else:
