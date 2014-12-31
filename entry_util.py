@@ -283,7 +283,9 @@ def show(list_name, defs):
     if not os.path.isfile("{}.list".format(list_name)):
         sys.exit("ERROR: list does not exist")
 
-        
+
+    hash_orig = hashlib.md5(open("{}.list".format(list_name), 'r').read()).hexdigest()
+    
     # open for editing
     try: editor = os.environ["EDITOR"]
     except:
@@ -292,17 +294,21 @@ def show(list_name, defs):
     if editor == "emacs":        
         prog = "emacs -nw {}.list".format(list_name)
     else:
-        prog = "{} {}.list".format(editor, listname)
+        prog = "{} {}.list".format(editor, list_name)
             
     stdout, stderr, rc = shell_util.run(prog)
 
+    hash_new = hashlib.md5(open("{}.list".format(list_name), 'r').read()).hexdigest()
 
-    # git-store the updates
-    stdout, stderr, rc = shell_util.run("git commit -m 'edited list {}.list' {}.list".format(list_name, list_name))
+    if not hash_orig == hash_new:
+    
+        # git-store the updates
+        stdout, stderr, rc = \
+            shell_util.run("git commit -m 'edited list {}.list' {}.list".format(list_name, list_name))
 
-    if not rc == 0:
-        print stdout, stderr
-        sys.exit("ERROR: there were git errors commiting the list")
+        if not rc == 0:
+            print stdout, stderr
+            sys.exit("ERROR: there were git errors commiting the list")
         
     
 
