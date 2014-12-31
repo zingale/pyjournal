@@ -15,89 +15,110 @@ import git_util
 
 
 if __name__ == "__main__":
-            
-    parser = argparse.ArgumentParser()
 
-    subparsers = parser.add_subparsers(title="subcommands", description="valid subcommands",
-                                       help="subcommands (use -h to see options for each)", dest="command")
-
-    # the init command
-    init_ps = subparsers.add_parser("init", help="initialize a journal")
-    init_ps.add_argument("nickname", help="name of the journal",
-                         nargs=1, default=None, type=str)
-    init_ps.add_argument("master-path",
-                         help="path where we will store the master (bare) git repo",
-                             nargs=1, default=None, type=str)
-    init_ps.add_argument("working-path",
-                         help="path where we will store the working directory (clone of bare repo)",
-                         nargs="?", default=None, type=str)
-
-    # the connect command
-    connect_ps = subparsers.add_parser("connect",
-                                       help="create a local working copy of a remote journal")
-    connect_ps.add_argument("remote-git-repo",
-                            help="the full path to the remote '.git' bare repo",
-                            nargs=1, default=None, type=str)
-    connect_ps.add_argument("working-path",
-                            help="the (local) path where we will store the working directory",
-                            nargs=1, default=None, type=str)
-
-    # the entry command
-    entry_ps = subparsers.add_parser("entry",
-                                     help="add a new entry, with optional images")
-    entry_ps.add_argument("images", help="images to include as figures in the entry",
-                          nargs="*", default=None, type=str)
-    entry_ps.add_argument("-n", metavar="nickname", help="nickname of the journal",
-                          type=str, default=None)
-
-    # the edit command
-    edit_ps = subparsers.add_parser("edit",
-                                    help="edit an existing entry")
-    edit_ps.add_argument("date-time string",
-                         help="entry id to edit, in the form: yyyy-mm-dd hh.mm.ss",
-                         nargs=1, default=None, type=str)
-    edit_ps.add_argument("-n", metavar="nickname", help="nickname of the journal",
-                         type=str, default=None)
-
-    # the list command
-    list_ps = subparsers.add_parser("list",
-                                    help="list the recent entry id's and .tex file path for the last entries")
-    list_ps.add_argument("-n", metavar="nickname", help="nickname of the journal",
-                         type=str, default=None)
-    list_ps.add_argument("-N", help="number of entries to list",
-                         type=int, default=10)    
-
-    # the build command
-    build_ps = subparsers.add_parser("build",
-                                     help="build a PDF of the journal")
-    build_ps.add_argument("-n", metavar="nickname", help="nickname of the journal",
-                         type=str, default=None)
-
-    # the pull command
-    pull_ps = subparsers.add_parser("pull",
-                                    help="pull from the remote journal" )
-    pull_ps.add_argument("-n", metavar="nickname", help="nickname of the journal",
-                         type=str, default=None)
-
-    # the push command
-    push_ps = subparsers.add_parser("push",
-                                    help="push local changes to the remote journal")
-    push_ps.add_argument("-n", metavar="nickname", help="nickname of the journal",
-                         type=str, default=None)
-
-    # the status command
-    stat_ps = subparsers.add_parser("status",
-                                    help="list the current journal information")
-    stat_ps.add_argument("-n", metavar="nickname", help="nickname of the journal",
-                         type=str, default=None)
-
-    # the show command
-    show_ps = subparsers.add_parser("show",
-                                    help="build the PDF and launch a PDF viewer")
-    show_ps.add_argument("-n", metavar="nickname", help="nickname of the journal",
-                         type=str, default=None)    
+    # short circuit -- if there are no arguments, then we default to
+    # entry, and we don't take any arguments, and we don't do an
+    # argparse
     
-    args = vars(parser.parse_args())
+    if len(sys.argv) == 1:  # the command name is first argument
+        args = {"command": "entry",
+                "images": [],
+                "n": None}            
+        
+    else:
+    
+        p = argparse.ArgumentParser()
+
+        sp = p.add_subparsers(title="subcommands",
+                              description="valid subcommands",
+                              help="subcommands (use -h to see options for each)",
+                              dest="command")
+
+        # the init command
+        init_ps = sp.add_parser("init", help="initialize a journal")
+        init_ps.add_argument("nickname", help="name of the journal",
+                             nargs=1, default=None, type=str)
+        init_ps.add_argument("master-path",
+                             help="path where we will store the master (bare) git repo",
+                             nargs=1, default=None, type=str)
+        init_ps.add_argument("working-path",
+                             help="path where we will store the working directory (clone of bare repo)",
+                             nargs="?", default=None, type=str)
+
+        # the connect command
+        connect_ps = sp.add_parser("connect",
+                                   help="create a local working copy of a remote journal")
+        connect_ps.add_argument("remote-git-repo",
+                                help="the full path to the remote '.git' bare repo",
+                                nargs=1, default=None, type=str)
+        connect_ps.add_argument("working-path",
+                                help="the (local) path where we will store the working directory",
+                                nargs=1, default=None, type=str)
+
+        # the entry command
+        entry_ps = sp.add_parser("entry",
+                                 help="add a new entry, with optional images")
+        entry_ps.add_argument("images", help="images to include as figures in the entry",
+                              nargs="*", default=None, type=str)
+        entry_ps.add_argument("-n", metavar="nickname",
+                              help="nickname of the journal",
+                              type=str, default=None)
+
+        # the edit command
+        edit_ps = sp.add_parser("edit",
+                                help="edit an existing entry")
+        edit_ps.add_argument("date-time string",
+                             help="entry id to edit, in the form: yyyy-mm-dd hh.mm.ss",
+                             nargs=1, default=None, type=str)
+        edit_ps.add_argument("-n", metavar="nickname",
+                             help="nickname of the journal",
+                             type=str, default=None)
+
+        # the list command
+        list_ps = sp.add_parser("list",
+                                help="list the recent entry id's and .tex file path for the last entries")
+        list_ps.add_argument("-n", metavar="nickname",
+                             help="nickname of the journal",
+                             type=str, default=None)
+        list_ps.add_argument("-N", help="number of entries to list",
+                             type=int, default=10)    
+
+        # the build command
+        build_ps = sp.add_parser("build",
+                                 help="build a PDF of the journal")
+        build_ps.add_argument("-n", metavar="nickname",
+                              help="nickname of the journal",
+                              type=str, default=None)
+
+        # the pull command
+        pull_ps = sp.add_parser("pull",
+                                help="pull from the remote journal" )
+        pull_ps.add_argument("-n", metavar="nickname",
+                             help="nickname of the journal",
+                             type=str, default=None)
+
+        # the push command
+        push_ps = sp.add_parser("push",
+                                help="push local changes to the remote journal")
+        push_ps.add_argument("-n", metavar="nickname",
+                             help="nickname of the journal",
+                             type=str, default=None)
+
+        # the status command
+        stat_ps = sp.add_parser("status",
+                                help="list the current journal information")
+        stat_ps.add_argument("-n", metavar="nickname",
+                             help="nickname of the journal",
+                             type=str, default=None)
+
+        # the show command
+        show_ps = sp.add_parser("show",
+                                help="build the PDF and launch a PDF viewer")
+        show_ps.add_argument("-n", metavar="nickname",
+                             help="nickname of the journal",
+                             type=str, default=None)    
+    
+        args = vars(p.parse_args())
 
 
     # parse the .pyjournalrc file -- store the results in a dictionary
