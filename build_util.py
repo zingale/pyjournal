@@ -59,9 +59,10 @@ def build(nickname, defs, show=0):
             sys.exit("ERROR: unable to create chapters.tex")
 
         current_month = None
+        current_day = None
         
         for e in entries:
-            ytmp, m, _ = e.split("-")            
+            ytmp, m, d = e.split("-")            
             if not ytmp == y:
                 continue
 
@@ -76,6 +77,10 @@ def build(nickname, defs, show=0):
 
             tex.sort()
             for t in tex:
+                if not d == current_day:
+                    f.write("\\subsection{{{} {}}}\n".format(month[m], d))
+                    current_day = d
+                            
                 f.write("\\HRule\\\\ \n")
                 idx = t.rfind(".tex")
                 tout = t[:idx].replace("_", " ")
