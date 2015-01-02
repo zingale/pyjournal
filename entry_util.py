@@ -174,6 +174,9 @@ def edit(nickname, date_string, defs):
 
     os.chdir(entry_dir)
 
+    # if we got the date string from the prompt, it may have a "_"
+    date_string = date_string.replace("_", " ")
+    
     try: d, t = date_string.split(" ")
     except:
         sys.exit("invalid date string")
@@ -231,7 +234,7 @@ def elist(nickname, num, defs):
     for n in range(min(num, len(e))):
         idx = e[n].rfind(".tex")
         entry_id = e[n][:idx]
-        print "{}: {}".format(entry_id, entries[e[n]])
+        print "{} : {}".format(entry_id, entries[e[n]])
         
 
 #=============================================================================
