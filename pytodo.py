@@ -17,12 +17,12 @@ if __name__ == "__main__":
     # the show command
     show_parser = subparsers.add_parser("show", help="show a list in an editor")
     show_parser.add_argument("list-name", help="the name of the todo list to show",
-                             nargs=1, default=None, type=str)
+                             nargs="?", default=None, type=str)
 
     # the cat command
-    show_parser = subparsers.add_parser("cat", help="display a list in the terminal (no editing)")
-    show_parser.add_argument("list-name", help="the name of the todo list to show",
-                             nargs=1, default=None, type=str)
+    cat_parser = subparsers.add_parser("cat", help="display a list in the terminal (no editing)")
+    cat_parser.add_argument("list-name", help="the name of the todo list to show",
+                             nargs="?", default=None, type=str)
     
     # the init command
     init_parser = subparsers.add_parser("init", help="initialize a todo collection")
@@ -53,6 +53,12 @@ if __name__ == "__main__":
 
     # the push command
     pull_parser = subparsers.add_parser("pull", help="pull remote changes to the local todo collection")
+
+    # the mark-default command
+    make_default_parser = subparsers.add_parser("make-default",
+                                                help="make a list the default for showing")
+    make_default_parser.add_argument("list-name", help="the name of the todo list",
+                            nargs=1, default=None, type=str)
     
     args = vars(parser.parse_args())
 
@@ -60,6 +66,7 @@ if __name__ == "__main__":
     # parse the .pytodorc file -- store the results in a dictionary
     defs = {}
     defs["param_file"] = os.path.expanduser("~") + "/.pytodorc"
+    defs["default_list"] = None
     
     if os.path.isfile(defs["param_file"]):
         cp = ConfigParser.ConfigParser()
@@ -73,18 +80,26 @@ if __name__ == "__main__":
         # all lists
         defs["working_path"] = cp.get("main", "working_path")
         defs["master_repo"] = cp.get("main", "master_repo")
-        
+        if "default_list" in cp.options("main"):
+            defs["default_list"] = cp.get("main", "default_list")
 
+            
     # take the appropriate action
     action = args["command"]
 
-    if action == "show":
-        list_name = args["list-name"][0]
-        entry_util.show(list_name, defs)
+    if action == "show" or action == "cat":
+        list_name = args["list-name"]
+        print list_name == None
+        if list_name == None:
+            if defs["default_list"] == None:
+                sys.exit("ERROR: no list specified")
+            else:
+                list_name = defs["default_list"]
 
-    elif action == "cat":
-        list_name = args["list-name"][0]
-        entry_util.cat(list_name, defs)
+        if action == "show":
+            entry_util.show(list_name, defs)
+        else:
+            entry_util.cat(list_name, defs)
         
     elif action == "init":
         master_path = args["master-path"][0]
@@ -113,6 +128,11 @@ if __name__ == "__main__":
         
     elif action == "list":
         entry_util.tlist(defs)
+
+    elif action == "make-default":
+        cp.set("main", "default_list", args["list-name"][0])
+        with open(defs["param_file"], "w") as config_file:
+            cp.write(config_file)
         
     elif action == "push":
         git_util.push(defs)

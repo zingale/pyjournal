@@ -22,7 +22,14 @@ class _TermColors:
     BOLD = '\033[1m'
     ENDC = '\033[0m'
                         
-
+def warning(str):
+    """
+    Output a string to the terminal colored orange to indicate a 
+    warning
+    """
+    print(_TermColors.WARNING + str + _TermColors.ENDC)
+            
+    
 def success(str):
     """
     Output a string to the terminal colored green to indicate 
@@ -286,7 +293,10 @@ def tlist(defs):
             known_lists.append(f[:idx])
 
     for l in sorted(known_lists):
-        success(l)
+        if l == defs["default_list"]:
+            success("* {}".format(l))
+        else:
+            warning("  {}".format(l))
         
     
 def show(list_name, defs):
