@@ -212,14 +212,14 @@ def pull(defs, nickname=None):
         wd = "{}/journal-{}".format(defs[nickname]["working_path"], nickname)
     else:
         wd = "{}/todo_list".format(defs["working_path"])
-        
+
     try: os.chdir(wd)
     except:
         sys.exit("ERROR: unable to switch to working directory: {}".format(wd))
 
     stdout, stderr, rc = shell_util.run("git pull")
     if not rc == 0:
-        print stderr
+        print stdout, stderr
         sys.exit("ERROR: something went wrong with the git pull")
 
     print stdout
