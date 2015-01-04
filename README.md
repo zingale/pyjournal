@@ -179,3 +179,14 @@ pytodo.py command -h
 ```
 
 to see the options for that command.
+
+To pretty-up the formatting in emacs, you can use standard markdown
+syntax (`#` for a heading, `*` and `-` for lists) and enable syntax
+highlighting in emacs with the following in your `.emacs`:
+
+```
+(autoload 'markdown-mode "markdown-mode"
+"Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.list\\'" . markdown-mode))
+```
