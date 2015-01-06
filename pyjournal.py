@@ -19,14 +19,14 @@ if __name__ == "__main__":
     # short circuit -- if there are no arguments, then we default to
     # entry, and we don't take any arguments, and we don't do an
     # argparse
-    
+
     if len(sys.argv) == 1:  # the command name is first argument
         args = {"command": "entry",
                 "images": [],
-                "n": None}            
-        
+                "n": None}
+
     else:
-    
+
         p = argparse.ArgumentParser()
 
         sp = p.add_subparsers(title="subcommands",
@@ -81,7 +81,7 @@ if __name__ == "__main__":
                              help="nickname of the journal",
                              type=str, default=None)
         list_ps.add_argument("-N", help="number of entries to list",
-                             type=int, default=10)    
+                             type=int, default=10)
 
         # the build command
         build_ps = sp.add_parser("build",
@@ -116,8 +116,8 @@ if __name__ == "__main__":
                                 help="build the PDF and launch a PDF viewer")
         show_ps.add_argument("-n", metavar="nickname",
                              help="nickname of the journal",
-                             type=str, default=None)    
-    
+                             type=str, default=None)
+
         args = vars(p.parse_args())
 
 
@@ -126,7 +126,7 @@ if __name__ == "__main__":
     defs = {}
     defs["param_file"] = os.path.expanduser("~") + "/.pyjournalrc"
     defs["image_dir"] = os.getcwd()
-    
+
     if os.path.isfile(defs["param_file"]):
         cp = ConfigParser.ConfigParser()
         cp.optionxform = str
@@ -136,8 +136,8 @@ if __name__ == "__main__":
             defs[sec] = {}
             defs[sec]["working_path"] = cp.get(sec, "working_path")
             defs[sec]["master_repo"] = cp.get(sec, "master_repo")
-            
-            
+
+
     action = args["command"]
 
     if not (action == "init" or action == "connect"):
@@ -146,7 +146,7 @@ if __name__ == "__main__":
         journals.remove("image_dir")
         if len(journals) > 0:
             default_nickname = journals[0]
-                
+
     if action == "init":
 
         nickname = args["nickname"][0]
@@ -156,10 +156,10 @@ if __name__ == "__main__":
         working_path = args["working-path"]
         if working_path == None:
             working_path = master_path
-        
+
         master_path = os.path.normpath(os.path.expanduser(master_path))
         working_path = os.path.normpath(os.path.expanduser(working_path))
-        
+
         git_util.init(nickname, master_path, working_path, defs)
 
     elif action == "connect":
@@ -168,9 +168,9 @@ if __name__ == "__main__":
         working_path = args["working-path"][0]
 
         working_path = os.path.normpath(os.path.expanduser(working_path))
-        
+
         git_util.connect(master_repo, working_path, defs)
-        
+
     elif action == "entry":
 
         images = args["images"]
@@ -179,11 +179,11 @@ if __name__ == "__main__":
             nickname = args["n"]
         else:
             nickname = default_nickname
-            
+
         entry_util.entry(nickname, images, defs)
 
     elif action == "edit":
-        
+
         # options: date-string
         date_string = args["date-time string"][0]
 
@@ -191,11 +191,11 @@ if __name__ == "__main__":
             nickname = args["n"]
         else:
             nickname = default_nickname
-        
+
         entry_util.edit(nickname, date_string, defs)
 
     elif action == "list":
-        
+
         # options: number to list (optional)
         num = args["N"]
 
@@ -203,10 +203,10 @@ if __name__ == "__main__":
             nickname = args["n"]
         else:
             nickname = default_nickname
-            
+
         entry_util.elist(nickname, num, defs)
 
-        
+
     elif action == "build":
 
         if not args["n"] == None:
@@ -222,25 +222,25 @@ if __name__ == "__main__":
             nickname = args["n"]
         else:
             nickname = default_nickname
-        
-        build_util.build(nickname, defs, show=1)        
-        
+
+        build_util.build(nickname, defs, show=1)
+
     elif action == "pull":
 
         if not args["n"] == None:
             nickname = args["n"]
         else:
             nickname = default_nickname
-        
+
         git_util.pull(defs, nickname=nickname)
-        
+
     elif action == "push":
 
         if not args["n"] == None:
             nickname = args["n"]
         else:
             nickname = default_nickname
-        
+
         git_util.push(defs, nickname=nickname)
 
     elif action == "status":
@@ -260,4 +260,3 @@ if __name__ == "__main__":
         # we should never land here, because of the choices argument
         # to actions in the argparser
         sys.exit("invalid action")
-

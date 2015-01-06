@@ -15,7 +15,7 @@ def init(nickname, master_path, working_path, defs):
     # make sure that a journal with this nickname doesn't already exist
     if nickname in defs.keys():
         sys.exit("ERROR: nickname already exists")
-    
+
     # create the bare git repo
     git_master = "{}/journal-{}.git".format(os.path.normpath(master_path), nickname)
     try: os.mkdir(git_master)
@@ -24,7 +24,7 @@ def init(nickname, master_path, working_path, defs):
 
     os.chdir(git_master)
     stdout, stderr, rc = shell_util.run("git init --bare")
-    
+
 
     # create the local working copy
     try: os.chdir(os.path.normpath(working_path))
@@ -32,18 +32,18 @@ def init(nickname, master_path, working_path, defs):
         sys.exit("ERROR: unable to change to {}".format(working_path))
 
     stdout, stderr, rc = shell_util.run("git clone " + git_master)
-    
+
 
     # create the initial directory structure
     working_journal = "{}/journal-{}".format(os.path.normpath(working_path), nickname)
-    
+
     try: os.mkdir(working_journal + "/entries/")
     except:
         sys.exit("ERROR: unable to create initial directory structure")
-                  
-    
+
+
     # create (or add to) the .pyjournalrc file
-    try: f = open(defs["param_file"], "a+")             
+    try: f = open(defs["param_file"], "a+")
     except:
         sys.exit("ERROR: unable to open {} for appending".format(defs["param_file"]))
 
@@ -56,12 +56,12 @@ def init(nickname, master_path, working_path, defs):
     defs[nickname] = {}
     defs[nickname]["master_repo"] = git_master
     defs[nickname]["working_path"] = working_path
-    
+
     # create an initial entry saying "journal created"
     images = []
     entry_util.entry(nickname, images, defs, string="journal created")
 
-    
+
     # copy over the journal.tex
     try: f = open("{}/journal.tex".format(working_journal), "w")
     except:
@@ -75,39 +75,39 @@ def init(nickname, master_path, working_path, defs):
 
     # add journal.tex to the repo and do a git push to make it synced
     os.chdir(working_journal)
-    
+
     stdout, stderr, rc = shell_util.run("git add journal.tex")
     stdout, stderr, rc = shell_util.run("git commit -m 'initial journal.tex file' journal.tex")
     stdout, stderr, rc = shell_util.run("git push")
-    
-    
+
+
 def connect(master_repo, working_path, defs):
 
     # get the nickname from the master repo name
     re_name = r"journal-(.*).git"
     a = re.search(re_name, master_repo)
 
-    if not a == None: 
+    if not a == None:
         nickname = a.group(1)
     else:
         sys.exit("ERROR: the remote-git-repo should be of the form: ssh://machine/dir/journal-nickname.git")
-    
+
     # make sure that a journal with this nickname doesn't already exist
     if nickname in defs.keys():
         sys.exit("ERROR: nickname already exists")
-                     
+
     # git clone the bare repo at master_repo into the working path
     try: os.chdir(working_path)
     except:
         sys.exit("ERROR: unable to switch to directory {}".format(working_path))
-        
+
     stdout, stderr, rc = shell_util.run("git clone " + master_repo)
     if not rc == 0:
         print stderr
         sys.exit("ERROR: something went wrong with the git clone")
-    
+
     # create (or add to) the .pyjournalrc file
-    try: f = open(defs["param_file"], "a+")             
+    try: f = open(defs["param_file"], "a+")
     except:
         sys.exit("ERROR: unable to open {} for appending".format(defs["param_file"]))
 
@@ -121,7 +121,7 @@ def connect(master_repo, working_path, defs):
 #=============================================================================
 # todo-specific routines
 #=============================================================================
-    
+
 def init_todo(master_path, working_path, defs):
 
     # create the bare git repo
@@ -132,7 +132,7 @@ def init_todo(master_path, working_path, defs):
 
     os.chdir(git_master)
     stdout, stderr, rc = shell_util.run("git init --bare")
-    
+
 
     # create the local working copy
     try: os.chdir(os.path.normpath(working_path))
@@ -140,10 +140,10 @@ def init_todo(master_path, working_path, defs):
         sys.exit("ERROR: unable to change to {}".format(working_path))
 
     stdout, stderr, rc = shell_util.run("git clone " + git_master)
-    
-    
+
+
     # create (or add to) the .pytodorc file
-    try: f = open(defs["param_file"], "a+")             
+    try: f = open(defs["param_file"], "a+")
     except:
         sys.exit("ERROR: unable to open {} for appending".format(defs["param_file"]))
 
@@ -152,10 +152,10 @@ def init_todo(master_path, working_path, defs):
     f.write("working_path = {}\n".format(working_path))
     f.write("\n")
     f.close()
-    
+
     # create a README
     working_todo = "{}/todo_list".format(os.path.normpath(working_path))
-    
+
     try: f = open("{}/README".format(working_todo), "w")
     except:
         sys.exit("ERROR: unable to open {}/README".format(working_todo))
@@ -166,11 +166,11 @@ def init_todo(master_path, working_path, defs):
 
     # add README to the repo and do a git push to make it synced
     os.chdir(working_todo)
-    
+
     stdout, stderr, rc = shell_util.run("git add README")
     stdout, stderr, rc = shell_util.run("git commit -m 'initial README file' README")
     stdout, stderr, rc = shell_util.run("git push")
-    
+
 
 def connect_todo(master_repo, working_path, defs):
 
@@ -178,19 +178,19 @@ def connect_todo(master_repo, working_path, defs):
     # collection per machine
     if os.path.isfile(defs["param_file"]):
         sys.exit("ERROR: a pytodo collection already exists")
-    
+
     # git clone the bare repo at master_repo into the working path
     try: os.chdir(working_path)
     except:
         sys.exit("ERROR: unable to switch to directory {}".format(working_path))
-        
+
     stdout, stderr, rc = shell_util.run("git clone " + master_repo)
     if not rc == 0:
         print stderr
         sys.exit("ERROR: something went wrong with the git clone")
-    
+
     # create the .pytodorc file
-    try: f = open(defs["param_file"], "w")             
+    try: f = open(defs["param_file"], "w")
     except:
         sys.exit("ERROR: unable to open {}".format(defs["param_file"]))
 
@@ -204,9 +204,9 @@ def connect_todo(master_repo, working_path, defs):
 #=============================================================================
 # general routines
 #=============================================================================
-    
+
 def pull(defs, nickname=None):
-    
+
     # switch to the working directory and pull from the master
     if not nickname == None:
         wd = "{}/journal-{}".format(defs[nickname]["working_path"], nickname)
@@ -223,7 +223,7 @@ def pull(defs, nickname=None):
         sys.exit("ERROR: something went wrong with the git pull")
 
     print stdout
-    
+
 
 def push(defs, nickname=None):
 
@@ -243,5 +243,3 @@ def push(defs, nickname=None):
         sys.exit("ERROR: something went wrong with the git push")
 
     print stderr
-
-

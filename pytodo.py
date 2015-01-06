@@ -23,14 +23,14 @@ if __name__ == "__main__":
     cat_parser = subparsers.add_parser("cat", help="display a list in the terminal (no editing)")
     cat_parser.add_argument("list-name", help="the name of the todo list to show",
                              nargs="?", default=None, type=str)
-    
+
     # the init command
     init_parser = subparsers.add_parser("init", help="initialize a todo collection")
     init_parser.add_argument("master-path",
                              help="path where we will store the master (bare) git repo",
                              nargs=1, default=None, type=str)
     init_parser.add_argument("working-path",
-                             help="path where we will store the working directory (clone of bare repo)", 
+                             help="path where we will store the working directory (clone of bare repo)",
                              nargs="?", default=None, type=str)
 
     # the connect command
@@ -39,12 +39,12 @@ if __name__ == "__main__":
                                 nargs=1, default=None, type=str)
     connect_parser.add_argument("working-path", help="the (local) path where we will store the working directory",
                                 nargs=1, default=None, type=str)
-                
+
     # the add command
     add_parser = subparsers.add_parser("add", help="add a new todo list to the collection")
     add_parser.add_argument("list-name", help="the name of the new todo list",
                             nargs=1, default=None, type=str)
-    
+
     # the list command
     list_parser = subparsers.add_parser("list", help="list available todo lists")
 
@@ -59,7 +59,7 @@ if __name__ == "__main__":
                                                 help="make a list the default for showing")
     make_default_parser.add_argument("list-name", help="the name of the todo list",
                             nargs=1, default=None, type=str)
-    
+
     args = vars(parser.parse_args())
 
 
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     defs = {}
     defs["param_file"] = os.path.expanduser("~") + "/.pytodorc"
     defs["default_list"] = None
-    
+
     if os.path.isfile(defs["param_file"]):
         cp = ConfigParser.ConfigParser()
         cp.optionxform = str
@@ -83,7 +83,7 @@ if __name__ == "__main__":
         if "default_list" in cp.options("main"):
             defs["default_list"] = cp.get("main", "default_list")
 
-            
+
     # take the appropriate action
     action = args["command"]
 
@@ -100,7 +100,7 @@ if __name__ == "__main__":
             entry_util.show(list_name, defs)
         else:
             entry_util.cat(list_name, defs)
-        
+
     elif action == "init":
         master_path = args["master-path"][0]
 
@@ -111,21 +111,21 @@ if __name__ == "__main__":
 
         master_path = os.path.normpath(os.path.expanduser(master_path))
         working_path = os.path.normpath(os.path.expanduser(working_path))
-        
+
         git_util.init_todo(master_path, working_path, defs)
-        
+
     elif action == "connect":
         master_repo = args["remote-git-repo"][0]
         working_path = args["working-path"][0]
 
         working_path = os.path.normpath(os.path.expanduser(working_path))
-        
-        git_util.connect_todo(master_repo, working_path, defs)        
-        
+
+        git_util.connect_todo(master_repo, working_path, defs)
+
     elif action == "add":
         list_name = args["list-name"][0]
         entry_util.add_list(list_name, defs)
-        
+
     elif action == "list":
         entry_util.tlist(defs)
 
@@ -133,19 +133,12 @@ if __name__ == "__main__":
         cp.set("main", "default_list", args["list-name"][0])
         with open(defs["param_file"], "w") as config_file:
             cp.write(config_file)
-        
+
     elif action == "push":
         git_util.push(defs)
-        
+
     elif action == "pull":
         git_util.pull(defs)
-        
+
     else:
         sys.exit("you should not have gotten here -- invalid action")
-
-        
-
-                                                    
-    
-    
-    

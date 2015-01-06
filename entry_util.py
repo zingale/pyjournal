@@ -21,23 +21,23 @@ class _TermColors:
     FAIL = '\033[91m'
     BOLD = '\033[1m'
     ENDC = '\033[0m'
-                        
+
 def warning(str):
     """
-    Output a string to the terminal colored orange to indicate a 
+    Output a string to the terminal colored orange to indicate a
     warning
     """
     print(_TermColors.WARNING + str + _TermColors.ENDC)
-            
-    
+
+
 def success(str):
     """
-    Output a string to the terminal colored green to indicate 
+    Output a string to the terminal colored green to indicate
     success
     """
     print(_TermColors.SUCCESS + str + _TermColors.ENDC)
-        
-    
+
+
 #=============================================================================
 # journal-specific routines
 #=============================================================================
@@ -51,7 +51,7 @@ def get_dir_string():
     now = datetime.date.today()
     return str(now)
 
-    
+
 def entry(nickname, images, defs, string=None):
 
     try: editor = os.environ["EDITOR"]
@@ -67,7 +67,7 @@ def entry(nickname, images, defs, string=None):
     odir = "{}/journal-{}/entries/{}/".format(defs[nickname]["working_path"],
                                               nickname,
                                               entry_dir)
-    
+
     if not os.path.isdir(odir):
         try: os.mkdir(odir)
         except:
@@ -76,18 +76,18 @@ def entry(nickname, images, defs, string=None):
 
     # create the entry file.  If we passed in a string, then write it
     # too.
-    try: f = open(odir + ofile, "w")             
+    try: f = open(odir + ofile, "w")
     except:
         sys.exit("ERROR: unable to open {}".format(odir + ofile))
 
     if not string == None:
         f.write(string)
 
-    
+
     # if there are images, then copy them over and add the figure
     # headings to the entry
     images_copied = []
-    if len(images) > 0:        
+    if len(images) > 0:
         for n in range(len(images)):
 
             # does an image by that name already live in the dest
@@ -102,7 +102,7 @@ def entry(nickname, images, defs, string=None):
                 im_copy = im
 
             dest = "{}/{}".format(dest, im_copy)
-                              
+
             # copy it
             try: shutil.copy(src, dest)
             except:
@@ -111,12 +111,12 @@ def entry(nickname, images, defs, string=None):
                 sys.exit("ERROR: unable to copy image {}".format(src))
 
             images_copied.append(im_copy)
-            
+
             # create a unique label for latex referencing
             idx = im.lower().rfind(".jpg")
             idx = max(idx, im.lower().rfind(".png"))
             idx = max(idx, im.lower().rfind(".pdf"))
-            
+
             if idx >= 0:
                 im0 = "{}:{}".format(entry_id, im[:idx])
 
@@ -124,26 +124,26 @@ def entry(nickname, images, defs, string=None):
             # add the figure text
             for l in figure_str.split("\n"):
                 f.write("{}\n".format(l.replace("@figname@", fname).replace("@figlabel@", im0).rstrip()))
-                
+
 
     # add the entry id as a LaTeX comment
-    f.write("\n\n% entry: {}".format(entry_id))    
+    f.write("\n\n% entry: {}".format(entry_id))
 
     f.close()
-        
+
     # get the hash for the file
     hash_orig = hashlib.md5(open(odir + ofile, 'r').read()).hexdigest()
 
-    
+
     # launch the editor specified in the EDITOR environment variable
     if string == None:
         if editor == "emacs":
             prog = "emacs -nw {}/{}".format(odir, ofile)
         else:
             prog = "{} {}/{}".format(editor, odir, ofile)
-            
+
         stdout, stderr, rc = shell_util.run(prog)
-        
+
 
     # did the user actually make edits?
     hash_new = hashlib.md5(open(odir + ofile, 'r').read()).hexdigest()
@@ -155,13 +155,13 @@ def entry(nickname, images, defs, string=None):
             try: os.remove(odir + ofile)
             except:
                 sys.exit("ERROR: unable to remove file -- entry aborted")
-                
+
             sys.exit("entry aborted")
 
-            
+
     # commit the entry to the working git repo
     os.chdir(odir)
-    
+
     stdout, stderr, rc = shell_util.run("git add " + ofile)
     stdout, stderr, rc = shell_util.run("git commit -m 'new entry' " + ofile)
 
@@ -173,7 +173,7 @@ def entry(nickname, images, defs, string=None):
     # helpful edit suggestion
     print "entry created.  Use 'pyjournal.py edit {}' to edit this entry.".format(entry_id)
 
-    
+
 def edit(nickname, date_string, defs):
 
     # find the file corresponding to the date string
@@ -183,44 +183,44 @@ def edit(nickname, date_string, defs):
 
     # if we got the date string from the prompt, it may have a "_"
     date_string = date_string.replace("_", " ")
-    
+
     try: d, t = date_string.split(" ")
     except:
         sys.exit("invalid date string")
-            
+
     if not os.path.isdir(d):
         sys.exit("entry directory does not exist")
 
     file = "{}/{}_{}.tex".format(d, d, t)
-    
+
     # git commit any changes
     if not os.path.isfile(file):
         sys.exit("entry {} does not exist".format(file))
 
-    # open the file for appending        
+    # open the file for appending
     try: editor = os.environ["EDITOR"]
     except:
         editor = "emacs"
 
     entry_id = get_entry_string()
 
-    try: f = open(file, "a+")             
+    try: f = open(file, "a+")
     except:
         sys.exit("ERROR: unable to open {}".format(file))
 
-    f.write("\n\n% entry edited: {}".format(entry_id))    
+    f.write("\n\n% entry edited: {}".format(entry_id))
     f.close()
 
     if editor == "emacs":
         prog = "emacs -nw {}".format(file)
     else:
         prog = "{} {}".format(editor, file)
-        
+
     stdout, stderr, rc = shell_util.run(prog)
 
     stdout, stderr, rc = shell_util.run("git commit -m 'edited entry' " + file)
-    
-    
+
+
 def elist(nickname, num, defs):
 
     entry_dir = "{}/journal-{}/entries/".format(defs[nickname]["working_path"], nickname)
@@ -230,7 +230,7 @@ def elist(nickname, num, defs):
         if os.path.isdir(entry_dir + d):
 
             dir = os.path.normpath("{}/{}".format(entry_dir, d))
-                                   
+
             for t in os.listdir(dir):
                 if t.endswith(".tex"):
                     entries[t] = "{}/{}".format(dir, t)
@@ -242,12 +242,12 @@ def elist(nickname, num, defs):
         idx = e[n].rfind(".tex")
         entry_id = e[n][:idx]
         print "{} : {}".format(entry_id, entries[e[n]])
-        
+
 
 #=============================================================================
 # todo-specific routines
 #=============================================================================
-        
+
 def add_list(list_name, defs):
 
     todo_dir = "{}/todo_list/".format(defs["working_path"])
@@ -260,8 +260,8 @@ def add_list(list_name, defs):
     # does it already exist?
     if os.path.isfile("{}.list".format(list_name)):
         sys.exit("ERROR: list already exists")
-                      
-        
+
+
     # create the list file
     try: f = open("{}.list".format(list_name), "w")
     except:
@@ -274,8 +274,8 @@ def add_list(list_name, defs):
     # commit the list
     stdout, stderr, rc = shell_util.run("git add {}.list".format(list_name))
     stdout, stderr, rc = shell_util.run("git commit -m 'new list' {}.list".format(list_name))
-        
-    
+
+
 def tlist(defs):
 
     todo_dir = "{}/todo_list/".format(defs["working_path"])
@@ -297,8 +297,8 @@ def tlist(defs):
             success("* {}".format(l))
         else:
             warning("  {}".format(l))
-        
-    
+
+
 def show(list_name, defs):
 
     todo_dir = "{}/todo_list/".format(defs["working_path"])
@@ -314,23 +314,23 @@ def show(list_name, defs):
 
 
     hash_orig = hashlib.md5(open("{}.list".format(list_name), 'r').read()).hexdigest()
-    
+
     # open for editing
     try: editor = os.environ["EDITOR"]
     except:
         editor = "emacs"
 
-    if editor == "emacs":        
+    if editor == "emacs":
         prog = "emacs -nw {}.list".format(list_name)
     else:
         prog = "{} {}.list".format(editor, list_name)
-            
+
     stdout, stderr, rc = shell_util.run(prog)
 
     hash_new = hashlib.md5(open("{}.list".format(list_name), 'r').read()).hexdigest()
 
     if not hash_orig == hash_new:
-    
+
         # git-store the updates
         stdout, stderr, rc = \
             shell_util.run("git commit -m 'edited list {}.list' {}.list".format(list_name, list_name))
@@ -338,8 +338,8 @@ def show(list_name, defs):
         if not rc == 0:
             print stdout, stderr
             sys.exit("ERROR: there were git errors commiting the list")
-        
-    
+
+
 
 def cat(list_name, defs):
 
@@ -353,11 +353,7 @@ def cat(list_name, defs):
     try: f = open("{}.list".format(list_name), "r")
     except:
         sys.exit("ERROR: list {} does not exist".format(list_name))
-        
+
     print f.read()
 
     f.close()
-
-    
-    
-

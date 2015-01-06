@@ -1,33 +1,33 @@
 journal_master = r"""
-\documentclass[11pt]{book}  
+\documentclass[11pt]{book}
 
 % include figures
 \usepackage{epsfig}
 
-% prefer PDF to PNG 
+% prefer PDF to PNG
 \DeclareGraphicsExtensions{%
-  .pdf, .png}     
+  .pdf, .png}
 
-% AMS symbols 
-\usepackage{amsmath,amssymb}                                                   
+% AMS symbols
+\usepackage{amsmath,amssymb}
 
 % cancel
-\usepackage{cancel}                                                            
+\usepackage{cancel}
 
-% Palatino font (and math symbols) -- looks nicer than the standard 
-% LaTeX font 
-\usepackage{mathpazo}      
+% Palatino font (and math symbols) -- looks nicer than the standard
+% LaTeX font
+\usepackage{mathpazo}
 
 % san-serif font
 \usepackage{helvet}
 
 \usepackage{sectsty}
-                                                            
-\allsectionsfont{\sffamily}    
+
+\allsectionsfont{\sffamily}
 
 % URLs (special font for monospace)
-\usepackage{inconsolata}                                                       
-\usepackage[T1]{fontenc}            
+\usepackage{inconsolata}
+\usepackage[T1]{fontenc}
 
 % geometry
 \usepackage[margin=1in]{geometry}
@@ -35,22 +35,22 @@ journal_master = r"""
 % hyperlinks
 \usepackage{hyperref}
 
-% color package 
+% color package
 \usepackage{color}
 
 % custom hrule
-\newcommand{\HRule}{\rule{\linewidth}{0.125mm}}                                
+\newcommand{\HRule}{\rule{\linewidth}{0.125mm}}
 
-% skip a bit of space between paragraphs, to enhance readability 
-\usepackage{parskip}                                                           
+% skip a bit of space between paragraphs, to enhance readability
+\usepackage{parskip}
 
 % captions
 \usepackage{caption}
 
 \renewcommand{\captionfont}{\footnotesize}
-\renewcommand{\captionlabelfont}{\footnotesize} 
-\setlength{\captionmargin}{3em} 
-  
+\renewcommand{\captionlabelfont}{\footnotesize}
+\setlength{\captionmargin}{3em}
+
 
 \begin{document}
 
@@ -73,8 +73,8 @@ journal_master = r"""
 
 \clearpage
 
-\setcounter{tocdepth}{2} 
-\tableofcontents        
+\setcounter{tocdepth}{2}
+\tableofcontents
 
 \clearpage
 
@@ -84,6 +84,3 @@ journal_master = r"""
 
 \end{document}
 """
-
-
-
