@@ -89,7 +89,7 @@ if __name__ == "__main__":
 
     if action == "show" or action == "cat":
         list_name = args["list-name"]
-        print list_name == None
+
         if list_name == None:
             if defs["default_list"] == None:
                 sys.exit("ERROR: no list specified")
