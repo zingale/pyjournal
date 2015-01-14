@@ -248,6 +248,26 @@ def elist(nickname, num, defs):
 # todo-specific routines
 #=============================================================================
 
+def rename_list(old_name, new_name, defs):
+
+    todo_dir = "{}/todo_list/".format(defs["working_path"])
+
+    try: os.chdir(todo_dir)
+    except:
+        sys.exit("ERROR: unable to cd into working directory {}".format(todo_dir))
+
+    if not os.path.isfile("{}.list".format(old_name)):
+        sys.exit("ERROR: list does not exist")
+
+    try: shutil.move("{}.list".format(old_name),
+                     "{}.list".format(new_name))
+    except:
+        sys.exit("ERROR: unable to rename list")
+
+    stdout, stderr, rc = shell_util.run("git add {}.list".format(new_name))
+    stdout, stderr, rc = shell_util.run("git commit -m 'renamed' {}.list {}.list".format(old_name, new_name))
+        
+
 def add_list(list_name, defs):
 
     todo_dir = "{}/todo_list/".format(defs["working_path"])

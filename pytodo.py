@@ -45,6 +45,13 @@ if __name__ == "__main__":
     add_parser.add_argument("list-name", help="the name of the new todo list",
                             nargs=1, default=None, type=str)
 
+    # the rename command
+    rename_parser = subparsers.add_parser("rename", help="rename a list")
+    rename_parser.add_argument("old-name", help="the existing name of the todo list",
+                            nargs=1, default=None, type=str)
+    rename_parser.add_argument("new-name", help="the new name of the todo list",
+                            nargs=1, default=None, type=str)
+
     # the list command
     list_parser = subparsers.add_parser("list", help="list available todo lists")
 
@@ -125,6 +132,11 @@ if __name__ == "__main__":
     elif action == "add":
         list_name = args["list-name"][0]
         entry_util.add_list(list_name, defs)
+
+    elif action == "rename":
+        old_name = args["old-name"][0]
+        new_name = args["new-name"][0]        
+        entry_util.rename_list(old_name, new_name, defs)
 
     elif action == "list":
         entry_util.tlist(defs)
