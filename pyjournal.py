@@ -118,9 +118,20 @@ if __name__ == "__main__":
                              help="nickname of the journal",
                              type=str, default=None)
 
+        # the appendix command
+        app_ps = sp.add_parser("appendix",
+                               help="add or modify an appendix of the journal")
+        app_ps.add_argument("-n", metavar="nickname",
+                            help="nickname of the journal",
+                            type=str, default=None)
+        app_ps.add_argument("name",
+                             help="the name of the appendix to edit",
+                             nargs=1, default=None, type=str)
+
+        
         args = vars(p.parse_args())
 
-
+        
     # parse the .pyjournalrc file -- store the results in a dictionary
     # e.g., defs["nickname"]["working_path"]
     defs = {}
@@ -151,7 +162,6 @@ if __name__ == "__main__":
 
         nickname = args["nickname"][0]
         master_path = args["master-path"][0]
-
 
         working_path = args["working-path"]
         if working_path == None:
@@ -193,6 +203,18 @@ if __name__ == "__main__":
             nickname = default_nickname
 
         entry_util.edit(nickname, date_string, defs)
+
+    elif action == "appendix":
+
+        name = args["name"][0]
+
+        if not args["n"] == None:
+            nickname = args["n"]
+        else:
+            nickname = default_nickname
+
+        entry_util.appendix(nickname, name, defs)
+
 
     elif action == "list":
 

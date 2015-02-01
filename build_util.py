@@ -25,9 +25,12 @@ def build(nickname, defs, show=0):
 
     # get the list of directories in entries/
     for d in os.listdir(entry_dir):
+        if d.endswith("appendices"):
+            continue
+        
         if os.path.isdir(entry_dir + d):
             entries.append(d)
-
+            
             y, m, d = d.split("-")
             if not y in years:
                 years.append(y)
@@ -48,9 +51,21 @@ def build(nickname, defs, show=0):
         f.write("\\chapter{{{}}}\n".format(y))
         f.write("\\input{{entries/{}.tex}}\n\n".format(y))
 
+    # now do the appendices
+    f.write("\\appendix\n")
+
+    app_dir = "{}/journal-{}/entries/appendices/".format(defs[nickname]["working_path"], nickname)
+
+    print app_dir
+    
+    if os.path.isdir(app_dir):
+        for t in os.listdir(app_dir):
+            if t.endswith(".tex"):
+                f.write("\\input{{entries/appendices/{}}}\n\n".format(t))
+
     f.close()
 
-
+    
     # within each year, months are sections
     for y in years:
 

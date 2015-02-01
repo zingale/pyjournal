@@ -193,7 +193,6 @@ def edit(nickname, date_string, defs):
 
     file = "{}/{}_{}.tex".format(d, d, t)
 
-    # git commit any changes
     if not os.path.isfile(file):
         sys.exit("entry {} does not exist".format(file))
 
@@ -218,13 +217,57 @@ def edit(nickname, date_string, defs):
 
     stdout, stderr, rc = shell_util.run(prog)
 
+    # git commit any changes
     stdout, stderr, rc = shell_util.run("git commit -m 'edited entry' " + file)
 
+
+def appendix(nickname, name, defs):
+
+    # is there an appendix directory?
+    app_dir = "{}/journal-{}/entries/appendices/".format(defs[nickname]["working_path"], nickname)
+
+    if not os.path.isdir(app_dir):
+        try: os.mkdir(app_dir)
+        except:
+            sys.exit("ERROR: unable to make the appendices/ directory")
+        
+    os.chdir(app_dir)
+
+    # edit the file, create if it does not exist
+    file = "{}.tex".format(name)
+
+    if not os.path.isfile(file):
+        warning("appendix {} will be created".format(name))
+
+    # open the file for appending
+    try: editor = os.environ["EDITOR"]
+    except:
+        editor = "emacs"
+
+    try: f = open(file, "a+")
+    except:
+        sys.exit("ERROR: unable to open {}".format(file))
+
+    entry_id = get_entry_string()
+    
+    f.write("\n\n% entry edited: {}".format(entry_id))
+    f.close()
+
+    if editor == "emacs":
+        prog = "emacs -nw {}".format(file)
+    else:
+        prog = "{} {}".format(editor, file)
+
+    stdout, stderr, rc = shell_util.run(prog)
+
+    # git commit any changes    
+    stdout, stderr, rc = shell_util.run("git add " + file)
+    stdout, stderr, rc = shell_util.run("git commit -m 'edited appendix' " + file)    
+    
 
 def elist(nickname, num, defs):
 
     entry_dir = "{}/journal-{}/entries/".format(defs[nickname]["working_path"], nickname)
-
     entries = {}
     for d in os.listdir(entry_dir):
         if os.path.isdir(entry_dir + d):
