@@ -56,8 +56,6 @@ def build(nickname, defs, show=0):
 
     app_dir = "{}/journal-{}/entries/appendices/".format(defs[nickname]["working_path"], nickname)
 
-    print app_dir
-    
     if os.path.isdir(app_dir):
         for t in os.listdir(app_dir):
             if t.endswith(".tex"):
