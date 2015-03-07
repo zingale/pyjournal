@@ -128,10 +128,10 @@ if __name__ == "__main__":
                              help="the name of the appendix to edit",
                              nargs=1, default=None, type=str)
 
-        
+
         args = vars(p.parse_args())
 
-        
+
     # parse the .pyjournalrc file -- store the results in a dictionary
     # e.g., defs["nickname"]["working_path"]
     defs = {}
@@ -272,12 +272,20 @@ if __name__ == "__main__":
         else:
             nickname = default_nickname
 
+        apps = build_util.get_appendices(nickname, defs)
+
         if nickname in defs.keys():
             print "pyjournal"
             print "  current journal: {}".format(nickname)
             print "  working directory: {}/journal-{}".format(defs[nickname]["working_path"], nickname)
             print "  master git repo: {}".format(defs[nickname]["master_repo"], nickname)
             print " "
+            if not len(apps) == 0:
+                print "  appendices: "
+                for a in apps:
+                    print "    {}".format(a)
+                print " "
+
     else:
         # we should never land here, because of the choices argument
         # to actions in the argparser

@@ -16,6 +16,18 @@ month = {"01": "January",
          "11": "November",
          "12": "December"}
 
+def get_appendices(nickname, defs):
+
+    app_dir = "{}/journal-{}/entries/appendices/".format(defs[nickname]["working_path"], nickname)
+
+    app = []
+    if os.path.isdir(app_dir):
+        for t in os.listdir(app_dir):
+            if t.endswith(".tex"):
+                app.append(t.split(".")[0])
+    return app
+
+
 def build(nickname, defs, show=0):
 
     entry_dir = "{}/journal-{}/entries/".format(defs[nickname]["working_path"], nickname)
@@ -27,10 +39,10 @@ def build(nickname, defs, show=0):
     for d in os.listdir(entry_dir):
         if d.endswith("appendices"):
             continue
-        
+
         if os.path.isdir(entry_dir + d):
             entries.append(d)
-            
+
             y, m, d = d.split("-")
             if not y in years:
                 years.append(y)
@@ -63,7 +75,7 @@ def build(nickname, defs, show=0):
 
     f.close()
 
-    
+
     # within each year, months are sections
     for y in years:
 
