@@ -2,9 +2,11 @@
 
 pyjournal is a commandline script written in python to create and
 manage a LaTeX-based scientific journal.  The journal is distributed
-(via `git`) so that we can access it from any machine we work on.
-It is commandline driven to make the barrier-to-entry for creating
-a short entry minimal.  The resulting PDF journal is searchable.
+(via `git`) so that we can access it from any machine we work on.  It
+is commandline driven to make the barrier-to-entry for creating a
+short entry minimal.  Entries are shown in date-order, and any number
+of appendices can be added to the end of the journal.  The resulting
+PDF journal is searchable.
 
 * Installing:
 
@@ -88,7 +90,9 @@ a short entry minimal.  The resulting PDF journal is searchable.
         yyy-mm-dd-hh-ss.tex
         ...
       yyyy-mm-dd/
-
+      appendixes/
+	    myappendix.tex
+	    ...
     journal.tex
   ```
 
@@ -100,6 +104,9 @@ a short entry minimal.  The resulting PDF journal is searchable.
     adds an entry to the journal (optionally named "nickname"). `XXX`,
     `YYY`, and `ZZZ` are optional names of images that will
     automatically be added as figures to the new entry
+
+    Note: if you just want to do an entry to the default journal with
+    no images, you can simply type `pyjournal.py` without any arguments.
 
   - `pyjournal.py edit [-n nickname] 'yyyy-mm-dd hh.mm.ss'`
 
@@ -126,16 +133,32 @@ a short entry minimal.  The resulting PDF journal is searchable.
     builds the journal PDF and launches the `evince` viewer in the
     background to display it.
 
+  - `pyjournal.py status [-n nickname]`
+
+    display the status of the journal, giving the location of hte
+    files, the name of the remote version, and list the names of the
+	appendices, if any
+
   - `pyjournal.py pull [-n nickname] `
 
-     gets any changes from the master version of the journal (remote
-     git bare repository)
+    gets any changes from the master version of the journal (remote
+    git bare repository)
 
   - `pyjournal.py push [-n nickname] `
 
     pushes any changes in the local journal to the remote (git bare
     repo) version
  
+
+* Appendices:
+
+  Sometimes we want to keep some special information in an appendix
+  of the journal, and periodically update it.  
+
+  To create an appendix (or modify an existing one), do:
+
+  `pyjournal.py appendix [-n nickname] appendix-name`
+
 
 * LaTeX structure:
 
