@@ -128,6 +128,13 @@ if __name__ == "__main__":
                              help="the name of the appendix to edit",
                              nargs=1, default=None, type=str)
 
+        # the mark-default command
+        make_default_ps = sp.add_parser("make-default",
+                                        help="make a journal the default for showing")
+        make_default_ps.add_argument("journal-name",
+                                     help="the name of the journal",
+                                     nargs=1, default=None, type=str)
+
 
         args = vars(p.parse_args())
 
@@ -137,13 +144,20 @@ if __name__ == "__main__":
     defs = {}
     defs["param_file"] = os.path.expanduser("~") + "/.pyjournalrc"
     defs["image_dir"] = os.getcwd()
-
+    defs["default_journal"] = None
+    
     if os.path.isfile(defs["param_file"]):
         cp = ConfigParser.ConfigParser()
         cp.optionxform = str
         cp.read(defs["param_file"])
 
-        for sec in cp.sections():
+        secs = cp.sections()
+        
+        if "main" in secs:
+            secs.remove("main")
+            defs["default_journal"] = cp.get("main", "default_journal")
+            
+        for sec in secs:
             defs[sec] = {}
             defs[sec]["working_path"] = cp.get(sec, "working_path")
             defs[sec]["master_repo"] = cp.get(sec, "master_repo")
@@ -156,8 +170,12 @@ if __name__ == "__main__":
         journals.remove("param_file")
         journals.remove("image_dir")
         if len(journals) > 0:
-            default_nickname = journals[0]
-
+            if defs["default_journal"] == None:
+                default_nickname = journals[0]
+            else:
+                default_nickname = defs["default_journal"]
+                
+                
     if action == "init":
 
         nickname = args["nickname"][0]
@@ -286,6 +304,13 @@ if __name__ == "__main__":
                     print "    {}".format(a)
                 print " "
 
+    elif action == "make-default":
+        if not cp.has_section("main"):
+            cp.add_section("main")
+        cp.set("main", "default_journal", args["journal-name"][0])
+        with open(defs["param_file"], "w") as config_file:
+            cp.write(config_file)
+                
     else:
         # we should never land here, because of the choices argument
         # to actions in the argparser
