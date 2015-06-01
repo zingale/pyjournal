@@ -304,6 +304,12 @@ if __name__ == "__main__":
                     print "    {}".format(a)
                 print " "
 
+        print "known journals:"
+        for k in defs.keys():
+            if k in ["main", "default_journal", "param_file", "image_dir"]:
+                continue
+            print "  {}".format(k)
+                
     elif action == "make-default":
         if not cp.has_section("main"):
             cp.add_section("main")
