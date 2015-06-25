@@ -176,6 +176,10 @@ def entry(nickname, images, defs, string=None):
 
 def edit(nickname, date_string, defs):
 
+    if date_string == "last":
+        last = elist(nickname, 1, defs, print_out=False)
+        date_string = last[0][0]
+
     # find the file corresponding to the date string
     entry_dir = "{}/journal-{}/entries/".format(defs[nickname]["working_path"], nickname)
 
@@ -265,7 +269,7 @@ def appendix(nickname, name, defs):
     stdout, stderr, rc = shell_util.run("git commit -m 'edited appendix' " + file)    
     
 
-def elist(nickname, num, defs):
+def elist(nickname, num, defs, print_out=True):
 
     entry_dir = "{}/journal-{}/entries/".format(defs[nickname]["working_path"], nickname)
     entries = {}
@@ -275,18 +279,25 @@ def elist(nickname, num, defs):
             dir = os.path.normpath("{}/{}".format(entry_dir, d))
 
             for t in os.listdir(dir):
-                if t.endswith(".tex"):
+                if t.endswith(".tex") and not "appendices" in dir:
                     entries[t] = "{}/{}".format(dir, t)
 
     e = entries.keys()
     e.sort(reverse=True)
 
+    last_entries = []
     for n in range(min(num, len(e))):
         idx = e[n].rfind(".tex")
         entry_id = e[n][:idx]
-        print "{} : {}".format(entry_id, entries[e[n]])
+        last_entries.append((entry_id, entries[e[n]]))
 
+    if print_out:
+        for e in last_entries:
+            print "{} : {}".format(e[0], e[1])
+    else:
+        return last_entries
 
+        
 #=============================================================================
 # todo-specific routines
 #=============================================================================

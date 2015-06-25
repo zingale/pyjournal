@@ -68,7 +68,7 @@ if __name__ == "__main__":
         edit_ps = sp.add_parser("edit",
                                 help="edit an existing entry")
         edit_ps.add_argument("date-time string",
-                             help="entry id to edit, in the form: yyyy-mm-dd hh.mm.ss",
+                             help="entry id to edit, in the form: yyyy-mm-dd hh.mm.ss or use 'last' to edit the last entry",
                              nargs=1, default=None, type=str)
         edit_ps.add_argument("-n", metavar="nickname",
                              help="nickname of the journal",
