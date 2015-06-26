@@ -213,3 +213,10 @@ highlighting in emacs with the following in your `.emacs`:
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.list\\'" . markdown-mode))
 ```
+
+You may also want to disable the annoying electric indent mode
+in recent emacs:
+
+```
+(electric-indent-mode 0)
+```
