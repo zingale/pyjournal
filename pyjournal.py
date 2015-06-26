@@ -128,7 +128,7 @@ if __name__ == "__main__":
                              help="the name of the appendix to edit",
                              nargs=1, default=None, type=str)
 
-        # the mark-default command
+        # the make-default command
         make_default_ps = sp.add_parser("make-default",
                                         help="make a journal the default for showing")
         make_default_ps.add_argument("journal-name",
@@ -169,12 +169,13 @@ if __name__ == "__main__":
         journals = defs.keys()
         journals.remove("param_file")
         journals.remove("image_dir")
+        journals.remove("default_journal")
+
         if len(journals) > 0:
             if defs["default_journal"] == None:
                 default_nickname = journals[0]
             else:
                 default_nickname = defs["default_journal"]
-                
                 
     if action == "init":
 
