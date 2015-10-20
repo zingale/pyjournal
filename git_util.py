@@ -16,6 +16,13 @@ def init(nickname, master_path, working_path, defs):
     if nickname in defs.keys():
         sys.exit("ERROR: nickname already exists")
 
+    # we are create the directory beneath master_path/, so make sure that
+    # exists
+    if not os.path.isdir(master_path):
+        try: os.mkdir(master_path)
+        except:
+            sys.exit("ERROR: you need to specify an existing path in which to create the journal repo")
+
     # create the bare git repo
     git_master = "{}/journal-{}.git".format(os.path.normpath(master_path), nickname)
     try: os.mkdir(git_master)
