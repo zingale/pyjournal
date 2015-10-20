@@ -30,9 +30,10 @@ PDF journal is searchable.
     entries, and copies in the master journal.tex file.  It will also
     add to (or create) a `.pyjournal` file with an entry
 
-    The master bare git repo is placed in `path`.  The working clone
-    that we interact with is placed there too, unless we specify the
-    optional `working-path` argument.
+    `path/` should be an existing directory.  The journal master repo
+	will be created as a subdirectory under `path/` as a bare git
+	repo.  The working clone that we interact with is placed there
+	too, unless we specify the optional `working-path` argument.
     
     The `git` operations that take place under the hood are:
     
