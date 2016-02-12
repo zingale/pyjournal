@@ -28,7 +28,8 @@ PDF journal is searchable.
     this initializes a bare git repo that will hold the journal data,
     creates the initial directory structure to hold the journal
     entries, and copies in the master journal.tex file.  It will also
-    add to (or create) a `.pyjournal` file with an entry
+    add to (or create) a `.pyjournal` file with an entry for this
+	journal name (nickname).
 
     `path/` should be an existing directory.  The journal master repo
 	will be created as a subdirectory under `path/` as a bare git
