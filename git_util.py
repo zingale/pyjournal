@@ -108,22 +108,11 @@ def connect(master_repo, working_path, defs):
     except:
         sys.exit("ERROR: unable to switch to directory {}".format(working_path))
 
-    ####
-    # This section gives the following error upon 'git pull' or 'pyjournal.py pull'
-    # With git version 2.4.3:
-    # # "Your configuration specifies to merge with the ref 'master'
-    # #  from the remote, but no such ref was fetched."
-
-    # {fix: remove the '.git' at the end of the 'git clone' statement.
-    master_repo_trim = master_repo.replace('.git','')
-    # :fix}
-    
-    stdout, stderr, rc = shell_util.run("git clone " + master_repo_trim)
+    stdout, stderr, rc = shell_util.run("git clone " + master_repo)
     if not rc == 0:
         print stderr
         sys.exit("ERROR: something went wrong with the git clone")
-    ####
-    
+
     # create (or add to) the .pyjournalrc file
     try: f = open(defs["param_file"], "a+")
     except:
