@@ -85,7 +85,7 @@ def init(nickname, master_path, working_path, defs):
 
     stdout, stderr, rc = shell_util.run("git add journal.tex")
     stdout, stderr, rc = shell_util.run("git commit -m 'initial journal.tex file' journal.tex")
-    stdout, stderr, rc = shell_util.run("git push")
+    stdout, stderr, rc = shell_util.run("git push origin master")
 
 
 def connect(master_repo, working_path, defs):
