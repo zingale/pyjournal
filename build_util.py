@@ -1,20 +1,8 @@
+import calendar
 import os
 import sys
 
 import shell_util
-
-month = {"01": "January",
-         "02": "February",
-         "03": "March",
-         "04": "April",
-         "05": "May",
-         "06": "June",
-         "07": "July",
-         "08": "August",
-         "09": "September",
-         "10": "October",
-         "11": "November",
-         "12": "December"}
 
 def get_appendices(nickname, defs):
 
@@ -92,7 +80,7 @@ def build(nickname, defs, show=0):
                 continue
 
             if not m == current_month:
-                f.write("\\section{{{}}}\n".format(month[m]))
+                f.write("\\section{{{}}}\n".format(calendar.month_name[int(m)]))
                 current_month = m
 
             tex = []
@@ -103,7 +91,7 @@ def build(nickname, defs, show=0):
             tex.sort()
             for t in tex:
                 if not d == current_day:
-                    f.write("\\subsection{{{} {}}}\n".format(month[m], d))
+                    f.write("\\subsection{{{} {}}}\n".format(calendar.month_name[int(m)], d))
                     current_day = d
 
                 f.write("\\HRule\\\\ \n")
