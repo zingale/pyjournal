@@ -12,19 +12,28 @@ import shell_util
 
 def init(nickname, master_path, working_path, defs):
 
+    # check the working path to make sure it is absolute, not relative
+    working_path = os.path.normpath(working_path)
+    if not working_path.startswith("/"):
+        working_path = os.path.abspath(working_path)
+
     # make sure that a journal with this nickname doesn't already exist
     if nickname in defs.keys():
         sys.exit("ERROR: nickname already exists")
 
     # we are create the directory beneath master_path/, so make sure that
     # exists
+    master_path = os.path.normpath(master_path)
+    if not master_path.startswith("/"):
+        master_path = os.path.abspath(master_path)
+    
     if not os.path.isdir(master_path):
         try: os.mkdir(master_path)
         except:
             sys.exit("ERROR: you need to specify an existing path in which to create the journal repo")
 
     # create the bare git repo
-    git_master = "{}/journal-{}.git".format(os.path.normpath(master_path), nickname)
+    git_master = "{}/journal-{}.git".format(master_path, nickname)
     try: os.mkdir(git_master)
     except:
         sys.exit("ERROR: unable to create a directory in {}".format(master_path))
@@ -34,7 +43,7 @@ def init(nickname, master_path, working_path, defs):
 
 
     # create the local working copy
-    try: os.chdir(os.path.normpath(working_path))
+    try: os.chdir(working_path)
     except:
         sys.exit("ERROR: unable to change to {}".format(working_path))
 
@@ -42,7 +51,7 @@ def init(nickname, master_path, working_path, defs):
 
 
     # create the initial directory structure
-    working_journal = "{}/journal-{}".format(os.path.normpath(working_path), nickname)
+    working_journal = "{}/journal-{}".format(working_path, nickname)
 
     try: os.mkdir(working_journal + "/entries/")
     except:
