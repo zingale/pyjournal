@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import datetime
 import hashlib
 import os
@@ -15,27 +17,27 @@ figure_str = r"""
 
 """
 
-class _TermColors:
+class _TermColors(object):
     WARNING = '\033[93m'
     SUCCESS = '\033[92m'
     FAIL = '\033[91m'
     BOLD = '\033[1m'
     ENDC = '\033[0m'
 
-def warning(str):
+def warning(ostr):
     """
     Output a string to the terminal colored orange to indicate a
     warning
     """
-    print(_TermColors.WARNING + str + _TermColors.ENDC)
+    print(_TermColors.WARNING + ostr + _TermColors.ENDC)
 
 
-def success(str):
+def success(ostr):
     """
     Output a string to the terminal colored green to indicate
     success
     """
-    print(_TermColors.SUCCESS + str + _TermColors.ENDC)
+    print(_TermColors.SUCCESS + ostr + _TermColors.ENDC)
 
 
 #=============================================================================
@@ -44,7 +46,7 @@ def success(str):
 
 def get_entry_string():
     now = datetime.datetime.now()
-    return str(now.replace(microsecond=0)).replace(" ", "_").replace(":",".")
+    return str(now.replace(microsecond=0)).replace(" ", "_").replace(":", ".")
 
 
 def get_dir_string():
@@ -80,51 +82,49 @@ def entry(nickname, images, defs, string=None):
     except:
         sys.exit("ERROR: unable to open {}".format(odir + ofile))
 
-    if not string == None:
+    if string is not None:
         f.write(string)
+    else:
+        f.write("% journal: {}\n".format(nickname))
 
 
     # if there are images, then copy them over and add the figure
     # headings to the entry
     images_copied = []
-    if len(images) > 0:
-        for n in range(len(images)):
+    for im in images:
 
-            # does an image by that name already live in the dest
-            # directory?
-            im = images[n]
-            src = "{}/{}".format(defs["image_dir"], im)
-            dest = odir
+        # does an image by that name already live in the dest
+        # directory?
+        src = "{}/{}".format(defs["image_dir"], im)
+        dest = odir
 
-            if os.path.isfile("{}/{}".format(dest, im)):
-                im_copy = "{}_{}".format(entry_id.replace(".", "_"), im)
-            else:
-                im_copy = im
+        if os.path.isfile("{}/{}".format(dest, im)):
+            im_copy = "{}_{}".format(entry_id.replace(".", "_"), im)
+        else:
+            im_copy = im
 
-            dest = "{}/{}".format(dest, im_copy)
+        dest = "{}/{}".format(dest, im_copy)
 
-            # copy it
-            try: shutil.copy(src, dest)
-            except:
-                print src
-                print dest
-                sys.exit("ERROR: unable to copy image {}".format(src))
+        # copy it
+        try: shutil.copy(src, dest)
+        except:
+            sys.exit("ERROR: unable to copy image {} to {}".format(src, dest))
 
-            images_copied.append(im_copy)
+        images_copied.append(im_copy)
 
-            # create a unique label for latex referencing
-            idx = im.lower().rfind(".jpg")
-            idx = max(idx, im.lower().rfind(".png"))
-            idx = max(idx, im.lower().rfind(".pdf"))
+        # create a unique label for latex referencing
+        idx = im.lower().rfind(".jpg")
+        idx = max(idx, im.lower().rfind(".png"))
+        idx = max(idx, im.lower().rfind(".pdf"))
 
-            if idx >= 0:
-                im0 = "{}:{}".format(entry_id, im[:idx])
+        if idx >= 0:
+            im0 = "{}:{}".format(entry_id, im[:idx])
 
-            fname = "entries/{}/{}".format(entry_dir, im_copy)
-            # add the figure text
-            for l in figure_str.split("\n"):
-                f.write("{}\n".format(l.replace("@figname@", fname).replace("@figlabel@", im0).rstrip()))
-
+        fname = "entries/{}/{}".format(entry_dir, im_copy)
+        # add the figure text
+        for l in figure_str.split("\n"):
+            f.write("{}\n".format(
+                l.replace("@figname@", fname).replace("@figlabel@", im0).rstrip()))
 
     # add the entry id as a LaTeX comment
     f.write("\n\n% entry: {}".format(entry_id))
@@ -151,7 +151,7 @@ def entry(nickname, images, defs, string=None):
     if string == None and len(images) == 0 and (hash_new == hash_orig):
         # user didn't do anything interesting
         answer = raw_input("no input made -- add this to the journal? (y/N) ")
-        if not answer.lower() == "y":
+        if answer.lower() != "y":
             try: os.remove(odir + ofile)
             except:
                 sys.exit("ERROR: unable to remove file -- entry aborted")
@@ -171,7 +171,7 @@ def entry(nickname, images, defs, string=None):
         stdout, stderr, rc = shell_util.run("git commit -m 'new image' " + im)
 
     # helpful edit suggestion
-    print "entry created.  Use 'pyjournal.py edit {}' to edit this entry.".format(entry_id)
+    print("entry created.  Use 'pyjournal.py edit {}' to edit this entry.".format(entry_id))
 
 
 def edit(nickname, date_string, defs):
@@ -228,13 +228,14 @@ def edit(nickname, date_string, defs):
 def appendix(nickname, name, defs):
 
     # is there an appendix directory?
-    app_dir = "{}/journal-{}/entries/appendices/".format(defs[nickname]["working_path"], nickname)
+    app_dir = "{}/journal-{}/entries/appendices/".format(
+        defs[nickname]["working_path"], nickname)
 
     if not os.path.isdir(app_dir):
         try: os.mkdir(app_dir)
         except:
             sys.exit("ERROR: unable to make the appendices/ directory")
-        
+
     os.chdir(app_dir)
 
     # edit the file, create if it does not exist
@@ -253,7 +254,7 @@ def appendix(nickname, name, defs):
         sys.exit("ERROR: unable to open {}".format(file))
 
     entry_id = get_entry_string()
-    
+
     f.write("\n\n% entry edited: {}".format(entry_id))
     f.close()
 
@@ -264,10 +265,10 @@ def appendix(nickname, name, defs):
 
     stdout, stderr, rc = shell_util.run(prog)
 
-    # git commit any changes    
+    # git commit any changes
     stdout, stderr, rc = shell_util.run("git add " + file)
-    stdout, stderr, rc = shell_util.run("git commit -m 'edited appendix' " + file)    
-    
+    stdout, stderr, rc = shell_util.run("git commit -m 'edited appendix' " + file)
+
 
 def elist(nickname, num, defs, print_out=True):
 
@@ -276,11 +277,11 @@ def elist(nickname, num, defs, print_out=True):
     for d in os.listdir(entry_dir):
         if os.path.isdir(entry_dir + d):
 
-            dir = os.path.normpath("{}/{}".format(entry_dir, d))
+            edir = os.path.normpath("{}/{}".format(entry_dir, d))
 
-            for t in os.listdir(dir):
-                if t.endswith(".tex") and not "appendices" in dir:
-                    entries[t] = "{}/{}".format(dir, t)
+            for t in os.listdir(edir):
+                if t.endswith(".tex") and not "appendices" in edir:
+                    entries[t] = "{}/{}".format(edir, t)
 
     e = entries.keys()
     e.sort(reverse=True)
@@ -293,11 +294,11 @@ def elist(nickname, num, defs, print_out=True):
 
     if print_out:
         for e in last_entries:
-            print "{} : {}".format(e[0], e[1])
+            print("{} : {}".format(e[0], e[1]))
     else:
         return last_entries
 
-        
+
 #=============================================================================
 # todo-specific routines
 #=============================================================================
@@ -319,8 +320,9 @@ def rename_list(old_name, new_name, defs):
         sys.exit("ERROR: unable to rename list")
 
     stdout, stderr, rc = shell_util.run("git add {}.list".format(new_name))
-    stdout, stderr, rc = shell_util.run("git commit -m 'renamed' {}.list {}.list".format(old_name, new_name))
-        
+    stdout, stderr, rc = \
+        shell_util.run("git commit -m 'renamed' {}.list {}.list".format(old_name, new_name))
+
 
 def add_list(list_name, defs):
 
@@ -360,11 +362,8 @@ def tlist(defs):
 
 
     # find the lists
-    known_lists = []
-    for f in os.listdir("."):
-        if os.path.isfile(f) and f.endswith(".list"):
-            idx = f.rfind(".list")
-            known_lists.append(f[:idx])
+    known_lists = [os.path.splitext(f)[0] for f in os.listdir(".") if
+                   os.path.isfile(f) and f.endswith(".list")]
 
     for l in sorted(known_lists):
         if l == defs["default_list"]:
@@ -403,14 +402,14 @@ def show(list_name, defs):
 
     hash_new = hashlib.md5(open("{}.list".format(list_name), 'r').read()).hexdigest()
 
-    if not hash_orig == hash_new:
+    if hash_orig != hash_new:
 
         # git-store the updates
         stdout, stderr, rc = \
             shell_util.run("git commit -m 'edited list {}.list' {}.list".format(list_name, list_name))
 
-        if not rc == 0:
-            print stdout, stderr
+        if rc != 0:
+            print(stdout, stderr)
             sys.exit("ERROR: there were git errors commiting the list")
 
 
@@ -428,6 +427,6 @@ def cat(list_name, defs):
     except:
         sys.exit("ERROR: list {} does not exist".format(list_name))
 
-    print f.read()
+    print(f.read())
 
     f.close()
