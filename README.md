@@ -8,6 +8,8 @@ short entry minimal.  Entries are shown in date-order, and any number
 of appendices can be added to the end of the journal.  The resulting
 PDF journal is searchable.
 
+Note: the current version of this works only for python 3
+
 * Installing:
 
   Simply clone the git repo and put the directory in your path.
