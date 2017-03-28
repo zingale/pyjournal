@@ -16,5 +16,7 @@ def run(string):
                               stderr=subprocess.PIPE)
         stdout0, stderr0 = p0.communicate()
         rc = p0.returncode
+        stdout = stdout0.decode('utf-8')
+        stderr = stderr0.decode('utf-8')
 
-    return stdout0, stderr0, rc
+    return stdout, stderr, rc

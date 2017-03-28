@@ -132,7 +132,7 @@ def entry(nickname, images, defs, string=None):
     f.close()
 
     # get the hash for the file
-    hash_orig = hashlib.md5(open(odir + ofile, 'r').read()).hexdigest()
+    hash_orig = hashlib.md5(open(odir + ofile, 'r').read().encode('utf-8')).hexdigest()
 
 
     # launch the editor specified in the EDITOR environment variable
@@ -146,7 +146,7 @@ def entry(nickname, images, defs, string=None):
 
 
     # did the user actually make edits?
-    hash_new = hashlib.md5(open(odir + ofile, 'r').read()).hexdigest()
+    hash_new = hashlib.md5(open(odir + ofile, 'r').read().encode('utf-8')).hexdigest()
 
     if string == None and len(images) == 0 and (hash_new == hash_orig):
         # user didn't do anything interesting
@@ -386,7 +386,7 @@ def show(list_name, defs):
         sys.exit("ERROR: list does not exist")
 
 
-    hash_orig = hashlib.md5(open("{}.list".format(list_name), 'r').read()).hexdigest()
+    hash_orig = hashlib.md5(open("{}.list".format(list_name), 'r').read().encode('utf-8')).hexdigest()
 
     # open for editing
     try: editor = os.environ["EDITOR"]
@@ -400,7 +400,7 @@ def show(list_name, defs):
 
     stdout, stderr, rc = shell_util.run(prog)
 
-    hash_new = hashlib.md5(open("{}.list".format(list_name), 'r').read()).hexdigest()
+    hash_new = hashlib.md5(open("{}.list".format(list_name), 'r').read().encode('utf-8')).hexdigest()
 
     if hash_orig != hash_new:
 

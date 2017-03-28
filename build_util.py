@@ -117,12 +117,12 @@ def build(nickname, defs, show=0):
     # note: pdflatex does not seem to use stderr at all
     pdf = os.path.normpath("{}/journal.pdf".format(build_dir))
     if os.path.isfile(pdf):
-        print "journal is located at {}".format(pdf)
+        print("journal is located at {}".format(pdf))
     else:
-        print stdout
-        print "There were LaTeX errors"
-        print "Check the source in {}/entries/".format(build_dir)
-        print "be sure to 'git commit' to store any fixes"
+        print(stdout)
+        print("There were LaTeX errors")
+        print("Check the source in {}/entries/".format(build_dir))
+        print("be sure to 'git commit' to store any fixes")
         sys.exit()
 
 

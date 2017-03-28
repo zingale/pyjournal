@@ -1,11 +1,15 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 a simple commandline-driven scientific journal in LaTeX managed by git
 """
 
+from __future__ import print_function
+
 import argparse
-import ConfigParser
+try: import ConfigParser as configparser                                        
+except ImportError:                                                             
+    import configparser
 import os
 import sys
 
@@ -147,7 +151,7 @@ if __name__ == "__main__":
     defs["default_journal"] = None
     
     if os.path.isfile(defs["param_file"]):
-        cp = ConfigParser.ConfigParser()
+        cp = configparser.ConfigParser()
         cp.optionxform = str
         cp.read(defs["param_file"])
 
@@ -166,7 +170,7 @@ if __name__ == "__main__":
     action = args["command"]
 
     if not (action == "init" or action == "connect"):
-        journals = defs.keys()
+        journals = list(defs.keys())
         journals.remove("param_file")
         journals.remove("image_dir")
         journals.remove("default_journal")
@@ -294,22 +298,22 @@ if __name__ == "__main__":
         apps = build_util.get_appendices(nickname, defs)
 
         if nickname in defs.keys():
-            print "pyjournal"
-            print "  current journal: {}".format(nickname)
-            print "  working directory: {}/journal-{}".format(defs[nickname]["working_path"], nickname)
-            print "  master git repo: {}".format(defs[nickname]["master_repo"], nickname)
-            print " "
+            print("pyjournal")
+            print("  current journal: {}".format(nickname))
+            print("  working directory: {}/journal-{}".format(defs[nickname]["working_path"], nickname))
+            print("  master git repo: {}".format(defs[nickname]["master_repo"], nickname))
+            print(" ")
             if not len(apps) == 0:
-                print "  appendices: "
+                print("  appendices: ")
                 for a in apps:
-                    print "    {}".format(a)
-                print " "
+                    print("    {}".format(a))
+                print(" ")
 
-        print "known journals:"
+        print("known journals:")
         for k in defs.keys():
             if k in ["main", "default_journal", "param_file", "image_dir"]:
                 continue
-            print "  {}".format(k)
+            print("  {}".format(k))
                 
     elif action == "make-default":
         if not cp.has_section("main"):

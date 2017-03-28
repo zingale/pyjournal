@@ -1,7 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
+from __future__ import print_function
 
 import argparse
-import ConfigParser
+try: import ConfigParser as configparser                                        
+except ImportError:                                                             
+    import configparser
 import os
 import sys
 
@@ -76,7 +80,7 @@ if __name__ == "__main__":
     defs["default_list"] = None
 
     if os.path.isfile(defs["param_file"]):
-        cp = ConfigParser.ConfigParser()
+        cp = configparser.ConfigParser()
         cp.optionxform = str
         cp.read(defs["param_file"])
 

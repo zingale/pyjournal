@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import os
 import re
 import sys
@@ -119,7 +121,7 @@ def connect(master_repo, working_path, defs):
 
     stdout, stderr, rc = shell_util.run("git clone " + master_repo)
     if not rc == 0:
-        print stderr
+        print(stderr)
         sys.exit("ERROR: something went wrong with the git clone")
 
     # create (or add to) the .pyjournalrc file
@@ -202,7 +204,7 @@ def connect_todo(master_repo, working_path, defs):
 
     stdout, stderr, rc = shell_util.run("git clone " + master_repo)
     if not rc == 0:
-        print stderr
+        print(stderr)
         sys.exit("ERROR: something went wrong with the git clone")
 
     # create the .pytodorc file
@@ -235,10 +237,10 @@ def pull(defs, nickname=None):
 
     stdout, stderr, rc = shell_util.run("git pull")
     if not rc == 0:
-        print stdout, stderr
+        print(stdout, stderr)
         sys.exit("ERROR: something went wrong with the git pull")
 
-    print stdout
+    print(stdout)
 
 
 def push(defs, nickname=None):
@@ -255,7 +257,7 @@ def push(defs, nickname=None):
 
     stdout, stderr, rc = shell_util.run("git push")
     if not rc == 0:
-        print stderr
+        print(stderr)
         sys.exit("ERROR: something went wrong with the git push")
 
-    print stderr
+    print(stderr)
