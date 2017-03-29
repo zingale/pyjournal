@@ -51,6 +51,7 @@ journal_master = r"""
 \renewcommand{\captionlabelfont}{\footnotesize}
 \setlength{\captionmargin}{3em}
 
+\newcommand{\htag}[1]{{\tt \##1}}
 
 \begin{document}
 

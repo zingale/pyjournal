@@ -158,6 +158,9 @@ def entry(nickname, images, defs, string=None):
 
             sys.exit("entry aborted")
 
+    # any tags?
+    #tags = find_tags(odir + ofile)
+    
 
     # commit the entry to the working git repo
     os.chdir(odir)
@@ -283,7 +286,7 @@ def elist(nickname, num, defs, print_out=True):
                 if t.endswith(".tex") and not "appendices" in edir:
                     entries[t] = "{}/{}".format(edir, t)
 
-    e = entries.keys()
+    e = list(entries.keys())
     e.sort(reverse=True)
 
     last_entries = []

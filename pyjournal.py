@@ -180,9 +180,13 @@ if __name__ == "__main__":
                 default_nickname = journals[0]
             else:
                 default_nickname = defs["default_journal"]
-                
-    if action == "init":
 
+        if not args["n"] == None:
+            nickname = args["n"]
+        else:
+            nickname = default_nickname                
+        
+    if action == "init":
         nickname = args["nickname"][0]
         master_path = args["master-path"][0]
 
@@ -196,105 +200,44 @@ if __name__ == "__main__":
         git_util.init(nickname, master_path, working_path, defs)
 
     elif action == "connect":
-
         master_repo = args["remote-git-repo"][0]
         working_path = args["working-path"][0]
-
         working_path = os.path.normpath(os.path.expanduser(working_path))
 
         git_util.connect(master_repo, working_path, defs)
 
     elif action == "entry":
-
         images = args["images"]
-
-        if not args["n"] == None:
-            nickname = args["n"]
-        else:
-            nickname = default_nickname
-
         entry_util.entry(nickname, images, defs)
 
     elif action == "edit":
-
         # options: date-string
         date_string = args["date-time string"][0]
-
-        if not args["n"] == None:
-            nickname = args["n"]
-        else:
-            nickname = default_nickname
-
         entry_util.edit(nickname, date_string, defs)
 
     elif action == "appendix":
-
         name = args["name"][0]
-
-        if not args["n"] == None:
-            nickname = args["n"]
-        else:
-            nickname = default_nickname
-
         entry_util.appendix(nickname, name, defs)
-
 
     elif action == "list":
 
         # options: number to list (optional)
         num = args["N"]
-
-        if not args["n"] == None:
-            nickname = args["n"]
-        else:
-            nickname = default_nickname
-
         entry_util.elist(nickname, num, defs)
 
-
     elif action == "build":
-
-        if not args["n"] == None:
-            nickname = args["n"]
-        else:
-            nickname = default_nickname
-
         build_util.build(nickname, defs)
 
     elif action == "show":
-
-        if not args["n"] == None:
-            nickname = args["n"]
-        else:
-            nickname = default_nickname
-
         build_util.build(nickname, defs, show=1)
 
     elif action == "pull":
-
-        if not args["n"] == None:
-            nickname = args["n"]
-        else:
-            nickname = default_nickname
-
         git_util.pull(defs, nickname=nickname)
 
     elif action == "push":
-
-        if not args["n"] == None:
-            nickname = args["n"]
-        else:
-            nickname = default_nickname
-
         git_util.push(defs, nickname=nickname)
 
     elif action == "status":
-
-        if not args["n"] == None:
-            nickname = args["n"]
-        else:
-            nickname = default_nickname
-
         apps = build_util.get_appendices(nickname, defs)
 
         if nickname in defs.keys():
