@@ -110,8 +110,11 @@ def build(nickname, defs, show=0):
     build_dir = "{}/journal-{}/".format(defs[nickname]["working_path"], nickname)
     os.chdir(build_dir)
 
-    for i in range(3):
-        stdout, stderr, rc = shell_util.run("pdflatex --halt-on-error journal.tex")
+    stdout, stderr, rc = shell_util.run("pdflatex --halt-on-error journal.tex")
+    stdout, stderr, rc = shell_util.run("pdflatex --halt-on-error journal.tex")
+    stdout, stderr, rc = shell_util.run("makeindex journal")
+    stdout, stderr, rc = shell_util.run("pdflatex --halt-on-error journal.tex")
+    stdout, stderr, rc = shell_util.run("pdflatex --halt-on-error journal.tex")
 
     # if we were not successful, then the PDF is not produced
     # note: pdflatex does not seem to use stderr at all

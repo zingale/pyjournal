@@ -18,7 +18,8 @@ import entry_util
 import git_util
 
 
-if __name__ == "__main__":
+def get_args():
+    """ parse the commandline arguments """
 
     # short circuit -- if there are no arguments, then we default to
     # entry, and we don't take any arguments, and we don't do an
@@ -28,11 +29,8 @@ if __name__ == "__main__":
         args = {"command": "entry",
                 "images": [],
                 "n": None}
-
     else:
-
         p = argparse.ArgumentParser()
-
         sp = p.add_subparsers(title="subcommands",
                               description="valid subcommands",
                               help="subcommands (use -h to see options for each)",
@@ -139,12 +137,13 @@ if __name__ == "__main__":
                                      help="the name of the journal",
                                      nargs=1, default=None, type=str)
 
-
         args = vars(p.parse_args())
 
+    return args
 
-    # parse the .pyjournalrc file -- store the results in a dictionary
-    # e.g., defs["nickname"]["working_path"]
+def read_config():
+    """ parse the .pyjournalrc file -- store the results in a dictionary
+        e.g., defs["nickname"]["working_path"] """
     defs = {}
     defs["param_file"] = os.path.expanduser("~") + "/.pyjournalrc"
     defs["image_dir"] = os.getcwd()
@@ -166,10 +165,14 @@ if __name__ == "__main__":
             defs[sec]["working_path"] = cp.get(sec, "working_path")
             defs[sec]["master_repo"] = cp.get(sec, "master_repo")
 
+    return defs
+
+def main(args, defs):
+    """ main interface """
 
     action = args["command"]
 
-    if not (action == "init" or action == "connect"):
+    if action not in ["init", "connect"]:
         journals = list(defs.keys())
         journals.remove("param_file")
         journals.remove("image_dir")
@@ -220,7 +223,6 @@ if __name__ == "__main__":
         entry_util.appendix(nickname, name, defs)
 
     elif action == "list":
-
         # options: number to list (optional)
         num = args["N"]
         entry_util.elist(nickname, num, defs)
@@ -269,3 +271,9 @@ if __name__ == "__main__":
         # we should never land here, because of the choices argument
         # to actions in the argparser
         sys.exit("invalid action")
+
+
+if __name__ == "__main__":
+    args = get_args()
+    defs = read_config()
+    main(args, defs)

@@ -41,6 +41,10 @@ journal_master = r"""
 % custom hrule
 \newcommand{\HRule}{\rule{\linewidth}{0.125mm}}
 
+% index
+\usepackage{makeidx}
+\makeindex
+
 % skip a bit of space between paragraphs, to enhance readability
 \usepackage{parskip}
 
@@ -51,7 +55,7 @@ journal_master = r"""
 \renewcommand{\captionlabelfont}{\footnotesize}
 \setlength{\captionmargin}{3em}
 
-\newcommand{\htag}[1]{{\tt \##1}}
+\newcommand{\htag}[1]{\index{{\tt \##1}}{\tt \##1}}
 
 \begin{document}
 
@@ -82,6 +86,12 @@ journal_master = r"""
 \mainmatter
 
 \input entries/chapters.tex
+
+\backmatter
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{Index}
+\printindex
 
 \end{document}
 """
