@@ -7,8 +7,8 @@ a simple commandline-driven scientific journal in LaTeX managed by git
 from __future__ import print_function
 
 import argparse
-try: import ConfigParser as configparser                                        
-except ImportError:                                                             
+try: import ConfigParser as configparser
+except ImportError:
     import configparser
 import os
 import sys
@@ -148,24 +148,40 @@ def read_config():
     defs["param_file"] = os.path.expanduser("~") + "/.pyjournalrc"
     defs["image_dir"] = os.getcwd()
     defs["default_journal"] = None
-    
+
     if os.path.isfile(defs["param_file"]):
         cp = configparser.ConfigParser()
         cp.optionxform = str
         cp.read(defs["param_file"])
 
         secs = cp.sections()
-        
+
         if "main" in secs:
             secs.remove("main")
             defs["default_journal"] = cp.get("main", "default_journal")
-            
+
         for sec in secs:
             defs[sec] = {}
             defs[sec]["working_path"] = cp.get(sec, "working_path")
             defs[sec]["master_repo"] = cp.get(sec, "master_repo")
 
     return defs
+
+def set_default(name, param_file):
+    """ set the default in the config file """
+
+    if os.path.isfile(param_file):
+        cp = configparser.ConfigParser()
+        cp.optionxform = str
+        cp.read(param_file)
+
+        if not cp.has_section("main"):
+            cp.add_section("main")
+        cp.set("main", "default_journal", name)
+
+        with open(param_file, "w") as config_file:
+            cp.write(config_file)
+
 
 def main(args, defs):
     """ main interface """
@@ -184,11 +200,14 @@ def main(args, defs):
             else:
                 default_nickname = defs["default_journal"]
 
-        if not args["n"] == None:
-            nickname = args["n"]
+        if "n" in args:
+            if args["n"] is not None:
+                nickname = args["n"]
+            else:
+                nickname = default_nickname
         else:
-            nickname = default_nickname                
-        
+            nickname = default_nickname
+
     if action == "init":
         nickname = args["nickname"][0]
         master_path = args["master-path"][0]
@@ -259,14 +278,10 @@ def main(args, defs):
             if k in ["main", "default_journal", "param_file", "image_dir"]:
                 continue
             print("  {}".format(k))
-                
+
     elif action == "make-default":
-        if not cp.has_section("main"):
-            cp.add_section("main")
-        cp.set("main", "default_journal", args["journal-name"][0])
-        with open(defs["param_file"], "w") as config_file:
-            cp.write(config_file)
-                
+        set_default(args["journal-name"][0], defs["param_file"])
+
     else:
         # we should never land here, because of the choices argument
         # to actions in the argparser
