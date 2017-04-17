@@ -154,6 +154,14 @@ Note: the current version of this works only for python 3
     repo) version
  
 
+* Hashtags
+
+  A new latex command `\htag{name}` is introduced to put a hash
+  tag in the journal entry.  When you build the journal, there will
+  be an index of hash tags at the end of the journal with links
+  to the pages.  This can let you organize entries into topics.
+  
+
 * Appendices:
 
   Sometimes we want to keep some special information in an appendix
