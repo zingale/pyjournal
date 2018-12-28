@@ -1,5 +1,8 @@
 # pyjournal
 
+NOTE: this project is no longer actively developed, and has been replaced
+by pyjournal2: https://github.com/zingale/pyjournal2/
+
 pyjournal is a commandline script written in python to create and
 manage a LaTeX-based scientific journal.  The journal is distributed
 (via `git`) so that we can access it from any machine we work on.  It
