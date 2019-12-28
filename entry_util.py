@@ -115,6 +115,7 @@ def entry(nickname, images, defs, string=None):
         # create a unique label for latex referencing
         idx = im.lower().rfind(".jpg")
         idx = max(idx, im.lower().rfind(".png"))
+        idx = max(idx, im.lower().rfind(".gif"))
         idx = max(idx, im.lower().rfind(".pdf"))
 
         if idx >= 0:
