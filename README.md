@@ -1,5 +1,8 @@
 # pyjournal
 
+NOTE: this project is no longer actively developed, and has been replaced
+by pyjournal2: https://github.com/zingale/pyjournal2/
+
 pyjournal is a commandline script written in python to create and
 manage a LaTeX-based scientific journal.  The journal is distributed
 (via `git`) so that we can access it from any machine we work on.  It
@@ -153,6 +156,14 @@ Note: the current version of this works only for python 3
     pushes any changes in the local journal to the remote (git bare
     repo) version
  
+
+* Hashtags
+
+  A new latex command `\htag{name}` is introduced to put a hash
+  tag in the journal entry.  When you build the journal, there will
+  be an index of hash tags at the end of the journal with links
+  to the pages.  This can let you organize entries into topics.
+  
 
 * Appendices:
 
